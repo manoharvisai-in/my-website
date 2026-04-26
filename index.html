@@ -1,20 +1,1332 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
-    <title>My First Website</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basic Electronics — Complete Exam Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Code+Pro:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f1a;
+    --bg2: #12152a;
+    --bg3: #1a1f38;
+    --card: #1e2340;
+    --card2: #232845;
+    --accent1: #f5c842;
+    --accent2: #4af0c4;
+    --accent3: #ff6b6b;
+    --accent4: #7b8cff;
+    --accent5: #ff9f43;
+    --text: #e8eaf6;
+    --muted: #8892b0;
+    --border: rgba(245,200,66,0.18);
+    --border2: rgba(74,240,196,0.15);
+    --glow: rgba(245,200,66,0.08);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  /* ---- NOISE OVERLAY ---- */
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events:none; z-index:0; opacity:.5;
+  }
+
+  /* ---- SIDEBAR NAV ---- */
+  #sidebar {
+    position: fixed; left:0; top:0; bottom:0;
+    width: 240px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 28px 0;
+    overflow-y: auto;
+    z-index: 100;
+    transition: transform .3s;
+  }
+  #sidebar .logo {
+    padding: 0 22px 24px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--accent1);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 18px;
+    letter-spacing:.03em;
+  }
+  #sidebar .logo span { display:block; font-family:'Lato',sans-serif; font-size:.7rem; color:var(--muted); font-weight:300; margin-top:3px; }
+  #sidebar a {
+    display: block;
+    padding: 9px 22px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    transition: color .2s, border-left .2s, background .2s;
+    border-left: 3px solid transparent;
+  }
+  #sidebar a:hover, #sidebar a.active {
+    color: var(--accent1);
+    border-left-color: var(--accent1);
+    background: var(--glow);
+  }
+  #sidebar .section-head {
+    padding: 14px 22px 4px;
+    font-size: .65rem;
+    color: var(--accent4);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  /* ---- MAIN ---- */
+  #main {
+    margin-left: 240px;
+    padding: 48px 52px 80px;
+    position: relative; z-index:1;
+    max-width: 1100px;
+  }
+
+  /* ---- HERO ---- */
+  .hero {
+    background: linear-gradient(135deg, #1a1f38 0%, #0d0f1a 60%);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 52px 48px;
+    margin-bottom: 52px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content:'';
+    position:absolute; right:-60px; top:-60px;
+    width:300px; height:300px;
+    background: radial-gradient(circle, rgba(245,200,66,.12) 0%, transparent 70%);
+    border-radius:50%;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    line-height:1.15;
+    color: var(--accent1);
+    margin-bottom: 14px;
+  }
+  .hero p { color: var(--muted); font-size:.95rem; max-width:560px; }
+  .badge-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:22px; }
+  .badge {
+    background: var(--card);
+    border: 1px solid var(--border2);
+    color: var(--accent2);
+    font-size:.72rem;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    padding: 5px 14px;
+    border-radius:50px;
+  }
+
+  /* ---- SECTION ---- */
+  .section {
+    margin-bottom: 64px;
+    scroll-margin-top: 30px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    color: var(--accent1);
+    margin-bottom: 6px;
+    display:flex; align-items:center; gap:14px;
+  }
+  .section-title .num {
+    background: var(--accent1);
+    color: var(--bg);
+    font-family: 'Source Code Pro', monospace;
+    font-size: .85rem;
+    width:32px; height:32px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .section-subtitle {
+    color: var(--muted); font-size:.85rem; margin-bottom:30px;
+    border-bottom: 1px solid var(--border); padding-bottom:14px;
+  }
+
+  /* ---- CARD ---- */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius:14px;
+    padding: 26px 30px;
+    margin-bottom:20px;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .card:hover { border-color: var(--accent1); box-shadow: 0 4px 28px rgba(245,200,66,.07); }
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size:1.15rem;
+    color: var(--accent2);
+    margin-bottom:12px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .card h3 .tag {
+    background: rgba(74,240,196,.12);
+    color: var(--accent2);
+    font-family:'Source Code Pro',monospace;
+    font-size:.65rem;
+    letter-spacing:.08em;
+    padding:3px 8px;
+    border-radius:4px;
+    font-weight:600;
+  }
+  .card h4 { color: var(--accent5); font-size:.95rem; margin:16px 0 6px; }
+
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+
+  /* ---- FORMULA BOX ---- */
+  .formula-box {
+    background: linear-gradient(135deg, #1a2040 0%, #0f1530 100%);
+    border: 1px solid var(--accent4);
+    border-radius:12px;
+    padding: 20px 26px;
+    margin: 14px 0;
+    font-family: 'Source Code Pro', monospace;
+    font-size:.95rem;
+    position:relative;
+  }
+  .formula-box .formula-label {
+    position:absolute; top:-10px; left:16px;
+    background: var(--accent4);
+    color: var(--bg);
+    font-size:.65rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    padding:2px 10px;
+    border-radius:4px;
+    font-weight:700;
+  }
+  .formula-box .main-formula {
+    font-size:1.3rem;
+    color: var(--accent1);
+    margin-bottom:10px;
+    letter-spacing:.04em;
+  }
+  .formula-box .vars {
+    font-size:.78rem;
+    color: var(--muted);
+    line-height:1.9;
+  }
+  .formula-box .vars span { color: var(--accent2); }
+
+  /* ---- TABLE ---- */
+  .tbl-wrap { overflow-x:auto; border-radius:12px; border:1px solid var(--border); }
+  table { width:100%; border-collapse:collapse; }
+  thead tr { background: var(--bg3); }
+  thead th {
+    padding: 12px 16px;
+    font-size:.72rem;
+    font-weight:700;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color: var(--accent1);
+    text-align:left;
+    border-bottom:1px solid var(--border);
+  }
+  tbody tr { border-bottom: 1px solid rgba(255,255,255,.04); }
+  tbody tr:hover { background: var(--glow); }
+  tbody td { padding:11px 16px; font-size:.87rem; vertical-align:top; }
+  tbody td:first-child { color: var(--accent2); font-weight:700; font-size:.85rem; }
+
+  /* ---- LIST STYLES ---- */
+  ul.fancy { list-style:none; padding:0; }
+  ul.fancy li {
+    padding: 6px 0 6px 22px;
+    position:relative;
+    font-size:.9rem;
+    border-bottom:1px solid rgba(255,255,255,.04);
+  }
+  ul.fancy li::before {
+    content:'▸';
+    position:absolute; left:0;
+    color: var(--accent1);
+    font-size:.75rem;
+    top:9px;
+  }
+  ul.fancy li:last-child { border-bottom:none; }
+
+  ol.steps { padding-left:22px; }
+  ol.steps li { padding:6px 0; font-size:.9rem; }
+  ol.steps li::marker { color: var(--accent1); font-weight:700; }
+
+  /* ---- CALLOUT BOXES ---- */
+  .callout {
+    border-radius:10px;
+    padding:14px 18px;
+    margin:14px 0;
+    font-size:.88rem;
+    display:flex; gap:14px; align-items:flex-start;
+  }
+  .callout .icon { font-size:1.2rem; flex-shrink:0; margin-top:1px; }
+  .callout-warn { background:rgba(255,107,107,.1); border-left:3px solid var(--accent3); }
+  .callout-tip  { background:rgba(245,200,66,.08); border-left:3px solid var(--accent1); }
+  .callout-info { background:rgba(74,240,196,.08); border-left:3px solid var(--accent2); }
+  .callout-imp  { background:rgba(123,140,255,.1); border-left:3px solid var(--accent4); }
+  .callout strong { color: var(--accent1); }
+
+  /* ---- TAGS ---- */
+  .tag-list { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+  .tag-item {
+    background: var(--bg3);
+    border:1px solid var(--border);
+    font-size:.75rem;
+    padding:4px 12px;
+    border-radius:50px;
+    color: var(--muted);
+    font-weight:700;
+  }
+  .tag-item.hot { border-color:var(--accent3); color:var(--accent3); }
+  .tag-item.imp { border-color:var(--accent1); color:var(--accent1); }
+
+  /* ---- TRUTH TABLE ---- */
+  .truth-tbl { display:inline-block; }
+  .truth-tbl table { min-width:180px; }
+  .truth-tbl td { text-align:center; font-family:'Source Code Pro',monospace; font-size:.85rem; }
+  .truth-tbl th { text-align:center; }
+  td.hi { color: var(--accent2); font-weight:700; }
+  td.lo { color: var(--muted); }
+
+  /* ---- CIRCUIT DIAGRAM (SVG) ---- */
+  .diagram-wrap {
+    background: var(--bg3);
+    border:1px solid var(--border2);
+    border-radius:12px;
+    padding:24px;
+    text-align:center;
+    margin:14px 0;
+  }
+  .diagram-wrap svg { max-width:100%; }
+
+  /* ---- MEGA REVISION ---- */
+  .mega { background: linear-gradient(135deg, #0f1530 0%, #1a1038 100%); }
+  .revision-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .rev-card {
+    background: var(--card2);
+    border-radius:12px;
+    padding:20px 22px;
+    border-left:3px solid var(--accent1);
+  }
+  .rev-card h4 {
+    color: var(--accent1);
+    font-size:.95rem;
+    margin-bottom:10px;
+    font-family:'Playfair Display',serif;
+  }
+  .rev-card ul { list-style:none; padding:0; }
+  .rev-card ul li {
+    font-size:.82rem;
+    color:var(--muted);
+    padding:3px 0 3px 16px;
+    position:relative;
+  }
+  .rev-card ul li::before { content:'•'; position:absolute; left:0; color:var(--accent1); }
+
+  /* ---- SOLVED NUMERICAL ---- */
+  .numerical {
+    background: var(--bg3);
+    border:1px solid var(--accent4);
+    border-radius:12px;
+    padding:22px 26px;
+    margin:14px 0;
+  }
+  .numerical .q { color:var(--accent5); font-weight:700; margin-bottom:10px; font-size:.92rem; }
+  .numerical .step { color:var(--text); font-size:.88rem; margin:4px 0; }
+  .numerical .step span { color:var(--accent2); font-family:'Source Code Pro',monospace; }
+  .numerical .ans { color:var(--accent1); font-weight:700; margin-top:10px; font-size:.92rem; }
+
+  /* ---- SCROLLBAR ---- */
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--card2); border-radius:3px; }
+  ::-webkit-scrollbar-thumb:hover { background:var(--accent1); }
+
+  /* ---- UTILITY ---- */
+  .mt { margin-top:16px; }
+  .mb { margin-bottom:16px; }
+  .text-accent1 { color:var(--accent1); }
+  .text-accent2 { color:var(--accent2); }
+  .text-accent3 { color:var(--accent3); }
+  .text-accent4 { color:var(--accent4); }
+  .code { font-family:'Source Code Pro',monospace; background:var(--bg3); padding:1px 7px; border-radius:4px; font-size:.85em; color:var(--accent2); }
+
+  @media(max-width:860px){
+    #sidebar { transform:translateX(-100%); }
+    #main { margin-left:0; padding:28px 18px 60px; }
+    .two-col, .three-col, .revision-grid { grid-template-columns:1fr; }
+  }
+
+  /* Animations */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  .section { animation: fadeUp .5s ease both; }
+  .section:nth-child(1){animation-delay:.05s}
+  .section:nth-child(2){animation-delay:.1s}
+  .section:nth-child(3){animation-delay:.15s}
+  .section:nth-child(4){animation-delay:.2s}
+  .section:nth-child(5){animation-delay:.25s}
+</style>
 </head>
 <body>
-    <h1>Hello, I'm Manohar Visai👋</h1>
-    <p>Welcome to my first website!</p>
 
-```
-<h2>About Me</h2>
-<p>I am learning web development and GitHub.</p>
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="logo">⚡ Electronics<span>Complete Exam Notes · EC-10001</span></div>
+  <div class="section-head">Topics</div>
+  <a href="#opamp">1. Op-Amp</a>
+  <a href="#digital">2. Digital Systems</a>
+  <a href="#sequential">3. Sequential Circuits</a>
+  <a href="#fet">4. FET & MOSFET</a>
+  <div class="section-head">Extras</div>
+  <a href="#numericals">📐 Numericals</a>
+  <a href="#faq">❓ FAQs</a>
+  <a href="#revision">🔁 Mega Revision</a>
+</nav>
 
-<h2>Contact</h2>
-<p>Email: mvagri477@gmail.com.com</p>
-```
+<!-- MAIN -->
+<div id="main">
 
+<!-- HERO -->
+<div class="hero">
+  <h1>Basic Electronics<br>Exam Notes</h1>
+  <p>Comprehensive, exam-focused study material covering Op-Amps, Digital Systems, Sequential Circuits, FET & MOSFET — with formulas, numericals, and revision sheets.</p>
+  <div class="badge-row">
+    <div class="badge">Op-Amp</div>
+    <div class="badge">Boolean Algebra</div>
+    <div class="badge">Flip-Flops</div>
+    <div class="badge">JFET</div>
+    <div class="badge">MOSFET</div>
+    <div class="badge">Mega Revision ✦</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SECTION 1: OP-AMP
+═══════════════════════════════════ -->
+<div class="section" id="opamp">
+  <div class="section-title"><span class="num">1</span> Operational Amplifier (Op-Amp)</div>
+  <div class="section-subtitle">Introduction · Characteristics · CMRR · Virtual Ground · Configurations</div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>What is an Op-Amp? <span class="tag">Definition</span></h3>
+      <ul class="fancy">
+        <li>General-purpose IC developed by <strong>Robert Widlar in 1964</strong>.</li>
+        <li>Can perform mathematical operations: summation, subtraction, integration, differentiation.</li>
+        <li>"Op" = operational → refers to performing operations.</li>
+        <li>Most popular IC: <strong>LM741</strong> (8-pin DIP).</li>
+        <li>Low cost, easy to use, temperature stable.</li>
+        <li>Only terminal properties needed — internal circuit not required.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Applications <span class="tag">Real World</span></h3>
+      <ul class="fancy">
+        <li>Signal amplification</li>
+        <li>Oscillators</li>
+        <li>Filters (active filters)</li>
+        <li>Voltage regulators</li>
+        <li>ADC / DAC converters</li>
+        <li>Calculators &amp; instrumentation</li>
+        <li>Summing / Difference amplifiers</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- LM741 PIN DIAGRAM -->
+  <div class="card">
+    <h3>Symbol &amp; LM741 Pin Configuration <span class="tag">Diagram</span></h3>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" width="660" height="220">
+        <!-- Op-Amp Triangle -->
+        <polygon points="220,40 220,180 380,110" fill="none" stroke="#f5c842" stroke-width="2"/>
+        <!-- Inputs -->
+        <line x1="100" y1="80" x2="220" y2="80" stroke="#4af0c4" stroke-width="1.5"/>
+        <text x="90" y="85" fill="#4af0c4" font-size="12" text-anchor="end" font-family="Source Code Pro">— (inv) pin 2</text>
+        <line x1="100" y1="140" x2="220" y2="140" stroke="#4af0c4" stroke-width="1.5"/>
+        <text x="90" y="145" fill="#4af0c4" font-size="12" text-anchor="end" font-family="Source Code Pro">+ (non-inv) pin 3</text>
+        <!-- Output -->
+        <line x1="380" y1="110" x2="480" y2="110" stroke="#f5c842" stroke-width="1.5"/>
+        <text x="490" y="115" fill="#f5c842" font-size="12" font-family="Source Code Pro">Output pin 6</text>
+        <!-- Power pins -->
+        <line x1="300" y1="40" x2="300" y2="10" stroke="#ff9f43" stroke-width="1.5"/>
+        <text x="305" y="12" fill="#ff9f43" font-size="11" font-family="Source Code Pro">V+ (pin 7)</text>
+        <line x1="300" y1="180" x2="300" y2="210" stroke="#ff9f43" stroke-width="1.5"/>
+        <text x="305" y="210" fill="#ff9f43" font-size="11" font-family="Source Code Pro">V— (pin 4)</text>
+        <!-- Labels inside -->
+        <text x="240" y="85" fill="#ff6b6b" font-size="16" font-weight="bold" font-family="Lato">—</text>
+        <text x="240" y="145" fill="#4af0c4" font-size="16" font-weight="bold" font-family="Lato">+</text>
+
+        <!-- LM741 IC box -->
+        <rect x="520" y="30" width="120" height="160" fill="none" stroke="#7b8cff" stroke-width="1.5" rx="4"/>
+        <text x="560" y="22" fill="#7b8cff" font-size="11" font-family="Source Code Pro">LM741</text>
+        <!-- Pins left side -->
+        <text x="528" y="56" fill="#4af0c4" font-size="10" font-family="Source Code Pro">1-NULL</text>
+        <text x="528" y="76" fill="#4af0c4" font-size="10" font-family="Source Code Pro">2-INV</text>
+        <text x="528" y="96" fill="#4af0c4" font-size="10" font-family="Source Code Pro">3-N.INV</text>
+        <text x="528" y="116" fill="#ff9f43" font-size="10" font-family="Source Code Pro">4-V—</text>
+        <!-- Pins right side -->
+        <text x="600" y="56" fill="#muted" font-size="10" fill="#8892b0" font-family="Source Code Pro">8-NC</text>
+        <text x="600" y="76" fill="#ff9f43" font-size="10" font-family="Source Code Pro">7-V+</text>
+        <text x="600" y="96" fill="#f5c842" font-size="10" font-family="Source Code Pro">6-OUT</text>
+        <text x="600" y="116" fill="#8892b0" font-size="10" font-family="Source Code Pro">5-NULL</text>
+      </svg>
+    </div>
+    <div class="callout callout-tip"><div class="icon">💡</div><div><strong>Memory Trick:</strong> "2 is Minus, 3 is Plus, 6 is Out, 7 is High, 4 is Low" — 2-3-4-6-7 are the key pins!</div></div>
+  </div>
+
+  <!-- CHARACTERISTICS -->
+  <div class="card">
+    <h3>Ideal vs Real Op-Amp Characteristics <span class="tag">Comparison</span></h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Parameter</th><th>Ideal Op-Amp</th><th>Real / Typical (LM741)</th></tr></thead>
+        <tbody>
+          <tr><td>Input Impedance (Zin)</td><td>∞</td><td>10⁶ Ω (BJT) / 10⁹–10¹² Ω (FET)</td></tr>
+          <tr><td>Output Impedance (Zout)</td><td>0</td><td>100–1000 Ω</td></tr>
+          <tr><td>Voltage Gain (Av)</td><td>∞</td><td>10⁵–10⁹</td></tr>
+          <tr><td>Bandwidth</td><td>∞</td><td>Finite (rolls off at high freq)</td></tr>
+          <tr><td>CMRR</td><td>∞</td><td>Very high (but finite)</td></tr>
+          <tr><td>Common Mode Gain</td><td>0</td><td>~10⁻⁵</td></tr>
+          <tr><td>Input Bias Current</td><td>0</td><td>10⁻¹² – 10⁻⁸ A</td></tr>
+          <tr><td>Temperature Drift</td><td>None</td><td>Present</td></tr>
+          <tr><td>Offset Voltage</td><td>0 (Vout=0 when Vin=0)</td><td>Small but non-zero</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout callout-imp mt"><div class="icon">📌</div><div><strong>Key Rule:</strong> For ideal op-amp analysis: (1) Zin = ∞ → no current into inputs. (2) Gain = ∞ → differential input ≈ 0 V (virtual short).</div></div>
+  </div>
+
+  <!-- CMRR -->
+  <div class="card">
+    <h3>CMRR — Common Mode Rejection Ratio <span class="tag">Formula</span></h3>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px">Op-Amp amplifies the difference between V₁ and V₂. CMRR measures how well it rejects the common (same) signal.</p>
+    <div class="formula-box">
+      <div class="formula-label">CMRR</div>
+      <div class="main-formula">CMRR = Aᵈ / Aᶜ</div>
+      <div class="main-formula" style="font-size:1rem;color:var(--accent2)">CMRR (dB) = 20 log(Aᵈ/Aᶜ)</div>
+      <div class="vars">
+        <span>Vd</span> = V₁ − V₂ &nbsp;(differential signal)<br>
+        <span>Vc</span> = (V₁ + V₂)/2 &nbsp;(common signal)<br>
+        <span>Aᵈ</span> = differential gain &nbsp;|&nbsp; <span>Aᶜ</span> = common mode gain<br>
+        Ideally CMRR = ∞ (Aᶜ = 0)
+      </div>
+    </div>
+    <div class="callout callout-tip"><div class="icon">💡</div><div><strong>Exam Tip:</strong> Higher CMRR = better op-amp = more noise rejection. Always express in dB in exams.</div></div>
+  </div>
+
+  <!-- VIRTUAL GROUND -->
+  <div class="card">
+    <h3>Virtual Ground <span class="tag">Concept</span></h3>
+    <ul class="fancy">
+      <li>In an inverting amplifier with feedback, the (−) input is NOT physically connected to ground.</li>
+      <li>But due to infinite gain and feedback, the voltage at (−) ≈ 0 V → acts as ground.</li>
+      <li>This point is called <strong>Virtual Ground</strong>.</li>
+      <li>No current flows into the op-amp input (Zin = ∞).</li>
+    </ul>
+    <div class="callout callout-warn mt"><div class="icon">⚠️</div><div><strong>Common Mistake:</strong> Students think virtual ground means the inverting pin is actually shorted to ground. It is NOT — it's just at 0 V due to feedback.</div></div>
+  </div>
+
+  <!-- CONFIGURATIONS -->
+  <div class="card">
+    <h3>Op-Amp Configurations — Formulas <span class="tag">All Types</span></h3>
+    <div class="two-col">
+      <div>
+        <h4>① Inverting Amplifier</h4>
+        <div class="formula-box" style="margin:8px 0">
+          <div class="formula-label">Gain</div>
+          <div class="main-formula" style="font-size:1.1rem">Av = −Rf / R1</div>
+          <div class="vars">Negative sign → 180° phase shift<br><span>Rf</span> = feedback resistor, <span>R1</span> = input resistor</div>
+        </div>
+        <h4>② Non-Inverting Amplifier</h4>
+        <div class="formula-box" style="margin:8px 0">
+          <div class="formula-label">Gain</div>
+          <div class="main-formula" style="font-size:1.1rem">Av = 1 + Rf / R1</div>
+          <div class="vars">Always ≥ 1 | No phase inversion</div>
+        </div>
+      </div>
+      <div>
+        <h4>③ Unity Gain Buffer</h4>
+        <div class="formula-box" style="margin:8px 0">
+          <div class="formula-label">Gain</div>
+          <div class="main-formula" style="font-size:1.1rem">Av = 1</div>
+          <div class="vars">Output connected directly to (−) input<br>Vout = Vin | Used for impedance isolation</div>
+        </div>
+        <h4>④ Summing Amplifier</h4>
+        <div class="formula-box" style="margin:8px 0">
+          <div class="formula-label">Output</div>
+          <div class="main-formula" style="font-size:.95rem">Vout = −Rf(V1/R1 + V2/R2)</div>
+          <div class="vars">If R1=R2=Rf: Vout = −(V1+V2)</div>
+        </div>
+      </div>
+    </div>
+    <h4>⑤ Differential Amplifier</h4>
+    <div class="formula-box">
+      <div class="formula-label">Output</div>
+      <div class="main-formula" style="font-size:1rem">Vout = (R2/R1)(V2 − V1)</div>
+      <div class="vars">If R1=R2: Vout = V2 − V1 &nbsp;|&nbsp; Amplifies difference, rejects common mode</div>
+    </div>
+    <h4>⑥ Comparator</h4>
+    <div class="formula-box">
+      <div class="formula-label">Logic Output</div>
+      <div class="main-formula" style="font-size:1rem">Vout = +Vsat &nbsp;if&nbsp; V+ > V−<br>Vout = −Vsat &nbsp;if&nbsp; V+ &lt; V−</div>
+      <div class="vars">No feedback | Operates in open-loop | Digital output</div>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="icon">🌟</div>
+    <div><strong>Most Important Points:</strong> Inverting amp = negative gain. Non-inverting amp = gain ≥ 1. Buffer = gain exactly 1. Summing = weighted adder. Comparator = no feedback, outputs HIGH or LOW only.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SECTION 2: DIGITAL SYSTEMS
+═══════════════════════════════════ -->
+<div class="section" id="digital">
+  <div class="section-title"><span class="num">2</span> Introduction to Digital Systems</div>
+  <div class="section-subtitle">Number Systems · Boolean Algebra · Logic Gates · Adders · Multiplexer</div>
+
+  <div class="card">
+    <h3>Why Digital / Binary? <span class="tag">Foundation</span></h3>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:14px">Computers use switches. Each switch = 2 states: ON (1) or OFF (0). Binary is the natural language of digital electronics.</p>
+    <div class="tag-list">
+      <div class="tag-item imp">Easy Representation</div>
+      <div class="tag-item imp">Less Error</div>
+      <div class="tag-item">No Circuit Analysis Needed</div>
+      <div class="tag-item">Easy to Design</div>
+      <div class="tag-item imp">Less Noise</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Number Systems <span class="tag">Conversions</span></h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>System</th><th>Base</th><th>Digits</th><th>Symbol</th></tr></thead>
+        <tbody>
+          <tr><td>Binary</td><td>2</td><td>0, 1</td><td>B</td></tr>
+          <tr><td>Octal</td><td>8</td><td>0–7</td><td>O</td></tr>
+          <tr><td>Decimal</td><td>10</td><td>0–9</td><td>D</td></tr>
+          <tr><td>Hexadecimal</td><td>16</td><td>0–9, A–F</td><td>H</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h4>Conversion Methods</h4>
+    <div class="two-col">
+      <div class="formula-box">
+        <div class="formula-label">Decimal → Binary</div>
+        <div class="main-formula" style="font-size:.9rem">Divide by 2, read remainders upward</div>
+        <div class="vars">
+          56 ÷ 2 = 28 r<span>0</span><br>
+          28 ÷ 2 = 14 r<span>0</span><br>
+          14 ÷ 2 = 7  r<span>0</span><br>
+           7 ÷ 2 = 3  r<span>1</span><br>
+           3 ÷ 2 = 1  r<span>1</span><br>
+           1 ÷ 2 = 0  r<span>1</span><br>
+          ∴ 56₁₀ = <span>111000</span>₂
+        </div>
+      </div>
+      <div class="formula-box">
+        <div class="formula-label">Binary → Decimal</div>
+        <div class="main-formula" style="font-size:.9rem">Multiply each bit by 2ⁿ</div>
+        <div class="vars">
+          (11010.11)₂<br>
+          = 1×2⁴ + 1×2³ + 0×2² + 1×2¹ + 0×2⁰ + 1×2⁻¹ + 1×2⁻²<br>
+          = 16+8+0+2+0+0.5+0.25<br>
+          = <span>26.75</span>₁₀
+        </div>
+      </div>
+    </div>
+    <div class="formula-box mt">
+      <div class="formula-label">Binary ↔ Octal / Hex Shortcuts</div>
+      <div class="main-formula" style="font-size:.9rem">Group 3 bits → Octal &nbsp;|&nbsp; Group 4 bits → Hex</div>
+      <div class="vars">
+        (001 010 111.100)₂ = <span>(127.4)₈</span><br>
+        (1011 0110 0101 1111)₂ = <span>(B65F)₁₆</span>
+      </div>
+    </div>
+    <div class="callout callout-tip mt"><div class="icon">💡</div><div><strong>Memory Trick — BODH:</strong> <strong>B</strong>inary <strong>O</strong>ctal <strong>D</strong>ecimal <strong>H</strong>ex — remember base 2, 8, 10, 16.</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Boolean Algebra <span class="tag">Laws</span></h3>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:10px">Mathematical system for variables that can be 0 or 1. Three basic operations: AND (·), OR (+), NOT (').</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Law</th><th>AND form</th><th>OR form</th></tr></thead>
+        <tbody>
+          <tr><td>Identity</td><td>A·1 = A</td><td>A+0 = A</td></tr>
+          <tr><td>Null</td><td>A·0 = 0</td><td>A+1 = 1</td></tr>
+          <tr><td>Idempotent</td><td>A·A = A</td><td>A+A = A</td></tr>
+          <tr><td>Complement</td><td>A·A' = 0</td><td>A+A' = 1</td></tr>
+          <tr><td>Double Negation</td><td colspan="2">(A')' = A</td></tr>
+          <tr><td>De Morgan's 1</td><td colspan="2">(A·B)' = A' + B'</td></tr>
+          <tr><td>De Morgan's 2</td><td colspan="2">(A+B)' = A' · B'</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout callout-imp mt"><div class="icon">📌</div><div><strong>De Morgan's Theorem</strong> is extremely frequently tested! Remember: break the bar, change the sign.</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Logic Gates <span class="tag">Truth Tables</span></h3>
+    <div class="three-col">
+      <div>
+        <h4>AND Gate (X·Y)</h4>
+        <div class="truth-tbl">
+          <table>
+            <thead><tr><th>X</th><th>Y</th><th>XY</th></tr></thead>
+            <tbody>
+              <tr><td class="lo">0</td><td class="lo">0</td><td class="lo">0</td></tr>
+              <tr><td class="lo">0</td><td class="hi">1</td><td class="lo">0</td></tr>
+              <tr><td class="hi">1</td><td class="lo">0</td><td class="lo">0</td></tr>
+              <tr><td class="hi">1</td><td class="hi">1</td><td class="hi">1</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <h4>OR Gate (X+Y)</h4>
+        <div class="truth-tbl">
+          <table>
+            <thead><tr><th>X</th><th>Y</th><th>X+Y</th></tr></thead>
+            <tbody>
+              <tr><td class="lo">0</td><td class="lo">0</td><td class="lo">0</td></tr>
+              <tr><td class="lo">0</td><td class="hi">1</td><td class="hi">1</td></tr>
+              <tr><td class="hi">1</td><td class="lo">0</td><td class="hi">1</td></tr>
+              <tr><td class="hi">1</td><td class="hi">1</td><td class="hi">1</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <h4>XOR Gate (X⊕Y)</h4>
+        <div class="truth-tbl">
+          <table>
+            <thead><tr><th>X</th><th>Y</th><th>X⊕Y</th></tr></thead>
+            <tbody>
+              <tr><td class="lo">0</td><td class="lo">0</td><td class="lo">0</td></tr>
+              <tr><td class="lo">0</td><td class="hi">1</td><td class="hi">1</td></tr>
+              <tr><td class="hi">1</td><td class="lo">0</td><td class="hi">1</td></tr>
+              <tr><td class="hi">1</td><td class="hi">1</td><td class="lo">0</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="mt">
+      <div class="two-col">
+        <div>
+          <h4>NAND (Universal Gate)</h4>
+          <div class="callout callout-info"><div class="icon">🌐</div><div>NAND output: <strong>X NAND Y = (XY)'</strong><br>Output is 0 only when both inputs are 1.<br>Can implement ANY Boolean function.</div></div>
+        </div>
+        <div>
+          <h4>NOR (Universal Gate)</h4>
+          <div class="callout callout-info"><div class="icon">🌐</div><div>NOR output: <strong>X NOR Y = (X+Y)'</strong><br>Output is 1 only when both inputs are 0.<br>Can implement ANY Boolean function.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="callout callout-tip mt"><div class="icon">💡</div><div><strong>XOR as Buffer:</strong> X⊕0 = X &nbsp;|&nbsp; <strong>XOR as Inverter:</strong> X⊕1 = X'<br><strong>XNOR:</strong> Output is 1 when inputs are same (opposite of XOR).</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Half Adder &amp; Half Subtractor <span class="tag">Combinational</span></h3>
+    <div class="two-col">
+      <div>
+        <h4>Half Adder</h4>
+        <p style="font-size:.83rem;color:var(--muted)">Adds two 1-bit numbers → Sum (S) + Carry (C)</p>
+        <div class="formula-box" style="margin:10px 0">
+          <div class="formula-label">Equations</div>
+          <div class="main-formula" style="font-size:1rem">S = A⊕B = A'B + AB'</div>
+          <div class="main-formula" style="font-size:1rem">C = A·B</div>
+          <div class="vars">Gates needed: <span>1 XOR + 1 AND</span></div>
+        </div>
+      </div>
+      <div>
+        <h4>Half Subtractor</h4>
+        <p style="font-size:.83rem;color:var(--muted)">Subtracts two 1-bit numbers → Difference (D) + Borrow (B₀)</p>
+        <div class="formula-box" style="margin:10px 0">
+          <div class="formula-label">Equations</div>
+          <div class="main-formula" style="font-size:1rem">D = A⊕B = A'B + AB'</div>
+          <div class="main-formula" style="font-size:1rem">B₀ = A'·B</div>
+          <div class="vars">Gates needed: <span>1 XOR + 1 AND + 1 NOT</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="callout callout-warn"><div class="icon">⚠️</div><div><strong>Key Difference:</strong> Half Adder and Half Subtractor have the same Sum/Difference equation (XOR), but Carry = AB while Borrow = A'B.</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Multiplexer (MUX) <span class="tag">Data Selector</span></h3>
+    <ul class="fancy">
+      <li>Routes 2ᴺ inputs → 1 output using N select lines.</li>
+      <li>Acts as a digital switch.</li>
+      <li><strong>2×1 MUX equation:</strong> Z = S'·I₀ + S·I₁</li>
+      <li>When S=0 → Z=I₀ &nbsp;|&nbsp; When S=1 → Z=I₁</li>
+      <li>MUX can implement any Boolean function → universal circuit.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SECTION 3: SEQUENTIAL CIRCUITS
+═══════════════════════════════════ -->
+<div class="section" id="sequential">
+  <div class="section-title"><span class="num">3</span> Sequential Circuits & Flip-Flops</div>
+  <div class="section-subtitle">Sequential vs Combinational · SR Latch · SR FF · JK FF</div>
+
+  <div class="card">
+    <h3>Sequential vs Combinational <span class="tag">Comparison</span></h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>Combinational Circuit</th><th>Sequential Circuit</th></tr></thead>
+        <tbody>
+          <tr><td>Output depends on</td><td>Present inputs only</td><td>Present input + Past states</td></tr>
+          <tr><td>Memory</td><td>No memory</td><td>Has memory (flip-flops)</td></tr>
+          <tr><td>Clock</td><td>Not needed</td><td>Usually needs clock</td></tr>
+          <tr><td>Examples</td><td>Adders, MUX, Encoder</td><td>Flip-flops, Counters, Registers</td></tr>
+          <tr><td>Feedback</td><td>No feedback</td><td>Has feedback</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Flip-Flop Basics <span class="tag">Memory Element</span></h3>
+    <ul class="fancy">
+      <li>A <strong>flip-flop</strong> stores 1 bit of data — either 0 or 1.</li>
+      <li>It is a <strong>bistable device</strong> — 2 stable states.</li>
+      <li>Types: SR, JK, D, T, MS flip-flops.</li>
+      <li><strong>Latch:</strong> Level triggered (responds to input level), NO clock needed.</li>
+      <li><strong>Flip-Flop:</strong> Edge triggered (responds to clock edge — rising or falling).</li>
+    </ul>
+    <div class="callout callout-imp mt"><div class="icon">📌</div><div><strong>Exam Key:</strong> Latch = level triggered, no clock. Flip-Flop = edge triggered, needs clock.</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>SR Latch <span class="tag">NAND Based</span></h3>
+      <p style="font-size:.83rem;color:var(--muted);margin-bottom:10px">Built with 2 cross-coupled NAND/NOR gates. Has S (Set) and R (Reset) inputs.</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>S</th><th>R</th><th>Qₙ₊₁</th><th>State</th></tr></thead>
+          <tbody>
+            <tr><td class="lo">0</td><td class="lo">0</td><td>Qₙ</td><td style="color:var(--accent2)">No Change (NC)</td></tr>
+            <tr><td class="lo">0</td><td class="hi">1</td><td class="lo">0</td><td style="color:var(--accent3)">Reset</td></tr>
+            <tr><td class="hi">1</td><td class="lo">0</td><td class="hi">1</td><td style="color:var(--accent1)">Set</td></tr>
+            <tr><td class="hi">1</td><td class="hi">1</td><td>x</td><td style="color:var(--accent4)">Invalid ⚠️</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout callout-warn mt"><div class="icon">⚠️</div><div><strong>S=R=1 is the forbidden/invalid state</strong> in SR latch/FF. Never allow this!</div></div>
+    </div>
+    <div class="card">
+      <h3>SR Flip-Flop <span class="tag">Clocked</span></h3>
+      <p style="font-size:.83rem;color:var(--muted);margin-bottom:10px">Gated SR latch — only responds when clock (C) is HIGH (rising edge).</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>C</th><th>S</th><th>R</th><th>Next Q</th></tr></thead>
+          <tbody>
+            <tr><td class="lo">0</td><td>X</td><td>X</td><td style="color:var(--accent2)">No change</td></tr>
+            <tr><td class="hi">1</td><td class="lo">0</td><td class="lo">0</td><td style="color:var(--accent2)">No change</td></tr>
+            <tr><td class="hi">1</td><td class="lo">0</td><td class="hi">1</td><td style="color:var(--accent3)">Q = 0 (Reset)</td></tr>
+            <tr><td class="hi">1</td><td class="hi">1</td><td class="lo">0</td><td style="color:var(--accent1)">Q = 1 (Set)</td></tr>
+            <tr><td class="hi">1</td><td class="hi">1</td><td class="hi">1</td><td style="color:var(--accent4)">Undefined ⚠️</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>JK Flip-Flop <span class="tag">Improved SR</span></h3>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:12px">JK FF is an SR FF with added feedback — eliminates the invalid state. J=Set, K=Reset.</p>
+    <div class="two-col">
+      <div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>CLK</th><th>J</th><th>K</th><th>Q (next)</th><th>State</th></tr></thead>
+            <tbody>
+              <tr><td class="hi">↑</td><td class="lo">0</td><td class="lo">0</td><td>Q</td><td style="color:var(--accent2)">No Change</td></tr>
+              <tr><td class="hi">↑</td><td class="lo">0</td><td class="hi">1</td><td class="lo">0</td><td style="color:var(--accent3)">Reset</td></tr>
+              <tr><td class="hi">↑</td><td class="hi">1</td><td class="lo">0</td><td class="hi">1</td><td style="color:var(--accent1)">Set</td></tr>
+              <tr><td class="hi">↑</td><td class="hi">1</td><td class="hi">1</td><td>Q'</td><td style="color:var(--accent5)">Toggle ✦</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="callout callout-tip"><div class="icon">💡</div><div><strong>Key Advantage of JK:</strong> When J=K=1, the output TOGGLES (Q→Q'). This state was invalid/undefined in SR FF. JK solves this problem!</div></div>
+        <div class="callout callout-imp mt"><div class="icon">📌</div><div><strong>Memory Trick:</strong> JK FF = SR FF + Feedback. "J sets, K clears, JK toggles."</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SECTION 4: FET & MOSFET
+═══════════════════════════════════ -->
+<div class="section" id="fet">
+  <div class="section-title"><span class="num">4</span> FET &amp; MOSFET</div>
+  <div class="section-subtitle">FET vs BJT · JFET · MOSFET (D-type, E-type) · Formulas</div>
+
+  <div class="card">
+    <h3>FET vs BJT <span class="tag">Comparison</span></h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>FET</th><th>BJT</th></tr></thead>
+        <tbody>
+          <tr><td>Control Type</td><td>Voltage controlled (Vgs)</td><td>Current controlled (Iᴮ)</td></tr>
+          <tr><td>Input Impedance</td><td>Very High (MΩ–TΩ)</td><td>Low–Medium (kΩ)</td></tr>
+          <tr><td>Noise</td><td>Less noise</td><td>More noise</td></tr>
+          <tr><td>Temperature</td><td>Less sensitive</td><td>More sensitive (thermal runaway)</td></tr>
+          <tr><td>Device Type</td><td>Unipolar (one carrier)</td><td>Bipolar (electrons + holes)</td></tr>
+          <tr><td>Thermal Runaway</td><td>NO thermal runaway ✓</td><td>Yes — thermal runaway possible</td></tr>
+          <tr><td>IC Suitability</td><td>Better for VLSI/IC</td><td>Less suited for high integration</td></tr>
+          <tr><td>Static Sensitivity</td><td>More static sensitive</td><td>Less</td></tr>
+          <tr><td>Common Uses</td><td>Amplifiers, switches, VLSI</td><td>Amplifiers, switches</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout callout-tip mt"><div class="icon">💡</div><div><strong>Memory Trick:</strong> FET = "Fewer Electrons Travel" → unipolar. BJT = "Both Junctions Travel" → bipolar.</div></div>
+  </div>
+
+  <div class="card">
+    <h3>FET Types — Classification <span class="tag">Tree</span></h3>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" width="580" height="200">
+        <rect x="10" y="80" width="60" height="36" rx="6" fill="none" stroke="#f5c842" stroke-width="1.5"/>
+        <text x="40" y="103" text-anchor="middle" font-size="13" fill="#f5c842" font-family="Lato" font-weight="700">FET</text>
+        <!-- JFET branch -->
+        <line x1="70" y1="98" x2="120" y2="70" stroke="#4af0c4" stroke-width="1.5"/>
+        <rect x="120" y="52" width="70" height="36" rx="6" fill="none" stroke="#4af0c4" stroke-width="1.5"/>
+        <text x="155" y="75" text-anchor="middle" font-size="12" fill="#4af0c4" font-family="Lato">JFET</text>
+        <line x1="190" y1="70" x2="230" y2="50" stroke="#4af0c4" stroke-width="1"/>
+        <text x="280" y="55" font-size="11" fill="#4af0c4" font-family="Lato">n-Channel JFET</text>
+        <line x1="190" y1="70" x2="230" y2="90" stroke="#4af0c4" stroke-width="1"/>
+        <text x="280" y="95" font-size="11" fill="#4af0c4" font-family="Lato">p-Channel JFET</text>
+        <!-- MOSFET branch -->
+        <line x1="70" y1="98" x2="120" y2="130" stroke="#7b8cff" stroke-width="1.5"/>
+        <rect x="120" y="112" width="70" height="36" rx="6" fill="none" stroke="#7b8cff" stroke-width="1.5"/>
+        <text x="155" y="135" text-anchor="middle" font-size="11" fill="#7b8cff" font-family="Lato">MOSFET</text>
+        <line x1="190" y1="130" x2="230" y2="115" stroke="#7b8cff" stroke-width="1"/>
+        <text x="280" y="120" font-size="11" fill="#ff9f43" font-family="Lato">Enhancement (E-MOS)</text>
+        <text x="300" y="135" font-size="10" fill="#8892b0" font-family="Lato">n-Ch / p-Ch EMOSFET</text>
+        <line x1="190" y1="130" x2="230" y2="155" stroke="#7b8cff" stroke-width="1"/>
+        <text x="280" y="160" font-size="11" fill="#ff6b6b" font-family="Lato">Depletion (D-MOS)</text>
+        <text x="300" y="175" font-size="10" fill="#8892b0" font-family="Lato">n-Ch / p-Ch DMOSFET</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>JFET — Junction Field Effect Transistor <span class="tag">Theory</span></h3>
+    <div class="two-col">
+      <div>
+        <h4>Terminals</h4>
+        <ul class="fancy">
+          <li><strong>Gate (G):</strong> Connected to p-type material, controls current.</li>
+          <li><strong>Drain (D):</strong> Positive terminal — where electrons are deficit.</li>
+          <li><strong>Source (S):</strong> Negative terminal — electron accumulation.</li>
+        </ul>
+        <h4>Operation (n-channel)</h4>
+        <ul class="fancy">
+          <li>VGS=0, VDS applied → current ID flows.</li>
+          <li>As VDS↑ → depletion region widens → resistance↑.</li>
+          <li>At pinch-off (VP): ID saturates = IDSS.</li>
+          <li>VGS< 0 → channel narrows → ID decreases.</li>
+          <li>VGS = VGS(off) → ID = 0 (cutoff).</li>
+        </ul>
+      </div>
+      <div>
+        <h4>3 Operating Regions</h4>
+        <div class="callout callout-info"><div class="icon">①</div><div><strong>Ohmic/Linear Region:</strong> VDS &lt; VP, ID depends on VDS — acts as voltage-controlled resistor.</div></div>
+        <div class="callout callout-info mt"><div class="icon">②</div><div><strong>Saturation/Pinch-off Region:</strong> VDS ≥ VP, ID ≈ constant = IDSS. Active amplification region.</div></div>
+        <div class="callout callout-warn mt"><div class="icon">③</div><div><strong>Breakdown Region:</strong> VDS > VDSmax → ID increases uncontrollably → JFET destroyed!</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JFET FORMULAS -->
+  <div class="card">
+    <h3>JFET Key Formulas <span class="tag">Must Know</span></h3>
+    <div class="two-col">
+      <div class="formula-box">
+        <div class="formula-label">Shockley's Equation</div>
+        <div class="main-formula">ID = IDSS(1 − VGS/VP)²</div>
+        <div class="vars">
+          <span>ID</span> = Drain current at given VGS<br>
+          <span>IDSS</span> = Max drain current (VGS=0)<br>
+          <span>VP</span> = Pinch-off voltage = VGS(off)<br>
+          When VGS=0: ID=IDSS<br>
+          When VGS=VP: ID=0
+        </div>
+      </div>
+      <div>
+        <div class="formula-box" style="margin-bottom:14px">
+          <div class="formula-label">Dynamic Resistance</div>
+          <div class="main-formula" style="font-size:1rem">rd = ΔVDS / ΔID |VGS=const</div>
+          <div class="vars">Reciprocal of slope in drain characteristics</div>
+        </div>
+        <div class="formula-box">
+          <div class="formula-label">Transconductance</div>
+          <div class="main-formula" style="font-size:1rem">gm = ΔID / ΔVGS |VDS=const</div>
+          <div class="vars">Rate of change of ID w.r.t. VGS</div>
+        </div>
+      </div>
+    </div>
+    <div class="formula-box mt">
+      <div class="formula-label">Amplification Factor</div>
+      <div class="main-formula">μ = ΔVDS / ΔVGS |ID=const = gm × rd</div>
+      <div class="vars"><span>μ</span> = amplification factor &nbsp;|&nbsp; <span>gm</span> = transconductance &nbsp;|&nbsp; <span>rd</span> = dynamic resistance</div>
+    </div>
+  </div>
+
+  <!-- MOSFET -->
+  <div class="card">
+    <h3>MOSFET — Metal Oxide Semiconductor FET <span class="tag">D-type vs E-type</span></h3>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:12px">Also called IGFET (Insulated Gate FET). Gate is insulated from channel by SiO₂ layer → infinite input impedance of gate.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>D-MOSFET (Depletion)</th><th>E-MOSFET (Enhancement)</th></tr></thead>
+        <tbody>
+          <tr><td>Channel at VGS=0</td><td>Exists — device is ON</td><td>Does NOT exist — device OFF</td></tr>
+          <tr><td>VGS for operation</td><td>Both − and + (depletion &amp; enhancement mode)</td><td>Only positive VGS (&gt; VT)</td></tr>
+          <tr><td>Threshold voltage</td><td>Not applicable (on at VGS=0)</td><td>VT = threshold voltage</td></tr>
+          <tr><td>Current formula</td><td>ID = IDSS(1−VGS/VP)²</td><td>ID = k(VGS − VT)²</td></tr>
+          <tr><td>Application</td><td>Amplifiers</td><td>Digital switches, CMOS</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="two-col mt">
+      <div class="formula-box">
+        <div class="formula-label">D-MOSFET</div>
+        <div class="main-formula" style="font-size:.95rem">ID = IDSS(1 − VGS/VP)²</div>
+        <div class="vars">
+          VGS=0 → ID=IDSS (depletion mode)<br>
+          VGS&gt;0 → ID&gt;IDSS (enhancement mode)<br>
+          VGS=VP → ID=0 (cutoff)
+        </div>
+      </div>
+      <div class="formula-box">
+        <div class="formula-label">E-MOSFET</div>
+        <div class="main-formula" style="font-size:.95rem">ID = k(VGS − VT)²</div>
+        <div class="vars">
+          <span>k</span> = ID(ON) / (VGS(ON) − VT)²<br>
+          <span>VT</span> = threshold voltage<br>
+          VDSsat = VGS − VT<br>
+          Device OFF when VGS &lt; VT
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SECTION: SOLVED NUMERICALS
+═══════════════════════════════════ -->
+<div class="section" id="numericals">
+  <div class="section-title"><span class="num">N</span> Solved Numericals</div>
+  <div class="section-subtitle">Step-by-step solutions with exam tricks</div>
+
+  <div class="numerical">
+    <div class="q">Q1. A JFET amplifier has VGS changed from −1V to −1.5V (VDS constant) causing ID to drop from 7mA to 5mA. Find gm and amplification factor if rd = 200kΩ.</div>
+    <div class="step">Step 1: Transconductance: <span>gm = ΔID / ΔVGS</span></div>
+    <div class="step"><span>ΔID = 7mA − 5mA = 2mA</span></div>
+    <div class="step"><span>ΔVGS = −1.5V − (−1V) = −0.5V</span></div>
+    <div class="step"><span>gm = 2mA / 0.5V = 4 mA/V</span></div>
+    <div class="step">Step 2: Amplification factor: <span>μ = gm × rd = 4×10⁻³ × 200×10³</span></div>
+    <div class="ans">∴ gm = 4 mA/V &nbsp;|&nbsp; μ = 800</div>
+  </div>
+
+  <div class="numerical">
+    <div class="q">Q2. A JFET has ID = 6mA, VP = −8V, VGS = −4.7V. Find IDSS.</div>
+    <div class="step">Using Shockley's equation: <span>ID = IDSS(1 − VGS/VP)²</span></div>
+    <div class="step"><span>6mA = IDSS × (1 − (−4.7)/(−8))²</span></div>
+    <div class="step"><span>6mA = IDSS × (1 − 0.5875)²</span></div>
+    <div class="step"><span>6mA = IDSS × (0.4125)² = IDSS × 0.1702</span></div>
+    <div class="step"><span>IDSS = 6mA / 0.1702</span></div>
+    <div class="ans">∴ IDSS ≈ 35.3 mA</div>
+  </div>
+
+  <div class="numerical">
+    <div class="q">Q3. JFET has IDSS = 40mA, VP = −6V, VGS = −4.5V. Find ID.</div>
+    <div class="step">Using: <span>ID = IDSS(1 − VGS/VP)²</span></div>
+    <div class="step"><span>ID = 40mA × (1 − (−4.5)/(−6))²</span></div>
+    <div class="step"><span>ID = 40mA × (1 − 0.75)² = 40mA × (0.25)²</span></div>
+    <div class="step"><span>ID = 40mA × 0.0625</span></div>
+    <div class="ans">∴ ID = 2.5 mA</div>
+  </div>
+
+  <div class="numerical">
+    <div class="q">Q4. Convert (315)₁₀ to Hexadecimal.</div>
+    <div class="step"><span>315 ÷ 16 = 19 remainder 11 (B)</span></div>
+    <div class="step"><span>19 ÷ 16 = 1 remainder 3</span></div>
+    <div class="step"><span>1 ÷ 16 = 0 remainder 1</span></div>
+    <div class="step">Read remainders from bottom to top (MSD → LSD)</div>
+    <div class="ans">∴ (315)₁₀ = (13B)₁₆</div>
+  </div>
+
+  <div class="card mt">
+    <h3>Practice Questions <span class="tag">Try These</span></h3>
+    <ol class="steps">
+      <li>A JFET has IDSS=12mA, VP=−5V. Find ID when VGS=−2.5V. <strong style="color:var(--accent1)">[Ans: 3mA]</strong></li>
+      <li>Find the gain of an inverting amplifier if Rf=100kΩ, R1=10kΩ. <strong style="color:var(--accent1)">[Ans: −10]</strong></li>
+      <li>Convert (127.4)₈ to binary. <strong style="color:var(--accent1)">[Ans: 1010111.100]</strong></li>
+      <li>For a non-inverting amplifier with Rf=47kΩ, R1=10kΩ, find gain. <strong style="color:var(--accent1)">[Ans: 5.7]</strong></li>
+      <li>E-MOSFET has VT=2V, k=0.5mA/V². Find ID when VGS=6V. <strong style="color:var(--accent1)">[Ans: 8mA]</strong></li>
+    </ol>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SECTION: FAQs
+═══════════════════════════════════ -->
+<div class="section" id="faq">
+  <div class="section-title"><span class="num">?</span> Frequently Asked &amp; Expected Questions</div>
+  <div class="section-subtitle">Most common exam questions with key answer pointers</div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>Op-Amp FAQs <span class="tag">Hot Topic</span></h3>
+      <ul class="fancy">
+        <li>What is virtual ground? Why is it called virtual? <em style="color:var(--muted);font-size:.8rem">(Not physically grounded — appears at 0V due to feedback)</em></li>
+        <li>Difference between ideal and practical op-amp.</li>
+        <li>What is CMRR? Why should it be high?</li>
+        <li>Draw and derive the gain of inverting amplifier.</li>
+        <li>What is a unity gain buffer used for? <em style="color:var(--muted);font-size:.8rem">(Impedance isolation)</em></li>
+        <li>How does a comparator work? What's the output?</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Digital &amp; Sequential FAQs <span class="tag">Hot Topic</span></h3>
+      <ul class="fancy">
+        <li>State and prove De Morgan's theorems.</li>
+        <li>Why are NAND and NOR called universal gates?</li>
+        <li>What is the difference between latch and flip-flop?</li>
+        <li>Why is SR=11 forbidden in SR flip-flop?</li>
+        <li>How does JK FF eliminate the invalid state of SR FF?</li>
+        <li>Design a half adder using logic gates.</li>
+        <li>Convert 56₁₀ to binary, octal, hexadecimal.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="two-col mt">
+    <div class="card">
+      <h3>FET FAQs <span class="tag">Hot Topic</span></h3>
+      <ul class="fancy">
+        <li>Compare FET and BJT. <em style="color:var(--muted);font-size:.8rem">(voltage vs current controlled, unipolar vs bipolar)</em></li>
+        <li>What is pinch-off in JFET? What happens after it?</li>
+        <li>State and apply Shockley's equation.</li>
+        <li>Explain IDSS and VGS(off).</li>
+        <li>What are the three parameters of JFET?</li>
+        <li>Difference between D-MOSFET and E-MOSFET.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>⚠️ Common Mistakes <span class="tag">Avoid These</span></h3>
+      <ul class="fancy">
+        <li>Confusing virtual ground with actual ground.</li>
+        <li>Forgetting the negative sign in inverting amplifier gain.</li>
+        <li>Using S=R=1 in SR flip-flop calculations.</li>
+        <li>Confusing latch (level triggered) with flip-flop (edge triggered).</li>
+        <li>Wrong sign of VGS in Shockley's equation (VP is negative for n-channel).</li>
+        <li>Forgetting to read remainders from bottom to top in conversions.</li>
+        <li>Confusing XOR (different inputs→1) with XNOR (same inputs→1).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card mt">
+    <h3>📝 Exam Writing Tips <span class="tag">Scoring</span></h3>
+    <ol class="steps">
+      <li>Always start with a <strong>clean diagram</strong> — Op-Amp symbol, gate symbol, etc. Diagrams earn marks even with minor errors.</li>
+      <li>Write formulas first, then substitute values with units.</li>
+      <li>For truth tables: draw a neat box table with proper headers (A, B, Output).</li>
+      <li>For conversions: show all division/multiplication steps, don't skip.</li>
+      <li>End numerical answers with a box around the final answer.</li>
+      <li>For comparison questions: always use a table format — 3–4 rows is enough.</li>
+    </ol>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     MEGA REVISION SHEET
+═══════════════════════════════════ -->
+<div class="section mega" id="revision" style="background:linear-gradient(135deg,#0f1530 0%,#1a1038 100%);border:1px solid var(--border);border-radius:18px;padding:40px 36px;">
+  <div class="section-title" style="margin-bottom:8px"><span class="num">★</span> MEGA REVISION SHEET</div>
+  <p style="color:var(--muted);font-size:.85rem;margin-bottom:30px;border-bottom:1px solid var(--border);padding-bottom:14px">Complete last-minute revision of all 4 topics — one glance covers everything!</p>
+
+  <div class="revision-grid">
+
+    <div class="rev-card" style="border-left-color:var(--accent1)">
+      <h4>⚡ Op-Amp — Quick Recall</h4>
+      <ul>
+        <li>Developed by Robert Widlar (1964) | IC: LM741</li>
+        <li>Ideal: Zin=∞, Zout=0, Av=∞, BW=∞, CMRR=∞</li>
+        <li>Two golden rules: V⁺=V⁻ (virtual short), I_in=0</li>
+        <li>Inverting Amp: Av = −Rf/R1 (180° phase shift)</li>
+        <li>Non-Inverting: Av = 1 + Rf/R1 (always ≥ 1)</li>
+        <li>Unity Buffer: Av = 1 (impedance isolation)</li>
+        <li>Summing: Vout = −Rf(V1/R1 + V2/R2)</li>
+        <li>CMRR = Ad/Ac = 20log(Ad/Ac) dB → higher is better</li>
+        <li>Comparator: No feedback, Vout = ±Vsat</li>
+        <li>Virtual ground: (−) input at 0V due to feedback</li>
+      </ul>
+    </div>
+
+    <div class="rev-card" style="border-left-color:var(--accent2)">
+      <h4>💻 Digital Systems — Quick Recall</h4>
+      <ul>
+        <li>Binary=base 2 | Octal=base 8 | Hex=base 16</li>
+        <li>Decimal→Binary: repeated division by 2, read up</li>
+        <li>Binary→Octal: group 3 bits | →Hex: group 4 bits</li>
+        <li>Boolean: A+A'=1 | A·A'=0 | A+1=1 | A·0=0</li>
+        <li>De Morgan: (AB)' = A'+B' | (A+B)' = A'·B'</li>
+        <li>AND: output 1 only when all inputs 1</li>
+        <li>OR: output 0 only when all inputs 0</li>
+        <li>XOR: output 1 when inputs DIFFER</li>
+        <li>NAND/NOR: Universal gates (can make all others)</li>
+        <li>Half Adder: S=A⊕B, C=AB | Subtractor: D=A⊕B, B₀=A'B</li>
+        <li>2×1 MUX: Z = S'I₀ + SI₁</li>
+      </ul>
+    </div>
+
+    <div class="rev-card" style="border-left-color:var(--accent5)">
+      <h4>🔁 Sequential Circuits — Quick Recall</h4>
+      <ul>
+        <li>Sequential = present input + past states (has memory)</li>
+        <li>Latch: level triggered, no clock needed</li>
+        <li>Flip-flop: edge triggered, needs clock</li>
+        <li>SR Latch: S=set Q=1 | R=reset Q=0 | S=R=1: INVALID!</li>
+        <li>SR FF: same as latch but gated by clock</li>
+        <li>JK FF: J=K=1 → TOGGLE (fixes SR invalid state)</li>
+        <li>JK = SR + feedback loops to eliminate undefined state</li>
+        <li>Bistable: 2 stable states (0 or 1)</li>
+        <li>Applications: Counters, registers, memory cells</li>
+        <li>SR forbidden combo: S=R=1 → avoid always!</li>
+      </ul>
+    </div>
+
+    <div class="rev-card" style="border-left-color:var(--accent4)">
+      <h4>📡 FET &amp; MOSFET — Quick Recall</h4>
+      <ul>
+        <li>FET = voltage controlled | BJT = current controlled</li>
+        <li>FET: unipolar | BJT: bipolar</li>
+        <li>FET: higher Zin, less noise, no thermal runaway</li>
+        <li>JFET terminals: Gate, Drain, Source</li>
+        <li>n-Ch JFET: VGS=0 → max ID=IDSS; VGS↓ → ID↓</li>
+        <li>Pinch-off (VP): ID saturates = IDSS</li>
+        <li>VGS=VGS(off)=VP → ID=0 (cutoff)</li>
+        <li>Shockley: ID = IDSS(1 − VGS/VP)²</li>
+        <li>gm = ΔID/ΔVGS | rd = ΔVDS/ΔID | μ = gm×rd</li>
+        <li>D-MOSFET: channel exists at VGS=0; can deplete or enhance</li>
+        <li>E-MOSFET: NO channel at VGS=0; needs VGS>VT</li>
+        <li>E-MOSFET: ID = k(VGS−VT)² | VDSsat = VGS−VT</li>
+        <li>MOSFET also called IGFET; SiO₂ insulates gate</li>
+        <li>MOSFET advantages: small size, low power, VLSI use</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- FORMULA QUICK REF -->
+  <div style="margin-top:28px">
+    <h4 style="color:var(--accent1);font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:16px">⚡ Formula Quick Reference</h4>
+    <div class="three-col">
+      <div class="formula-box" style="border-color:var(--accent1)">
+        <div class="formula-label" style="background:var(--accent1)">Op-Amp</div>
+        <div class="vars" style="font-size:.82rem;line-height:2">
+          <span>Av(inv)</span> = −Rf/R1<br>
+          <span>Av(non-inv)</span> = 1 + Rf/R1<br>
+          <span>CMRR</span> = Ad/Ac<br>
+          <span>CMRR(dB)</span> = 20log(Ad/Ac)
+        </div>
+      </div>
+      <div class="formula-box" style="border-color:var(--accent2)">
+        <div class="formula-label" style="background:var(--accent2)">JFET</div>
+        <div class="vars" style="font-size:.82rem;line-height:2">
+          <span>ID</span> = IDSS(1 − VGS/VP)²<br>
+          <span>gm</span> = ΔID/ΔVGS<br>
+          <span>rd</span> = ΔVDS/ΔID<br>
+          <span>μ</span> = gm × rd
+        </div>
+      </div>
+      <div class="formula-box" style="border-color:var(--accent5)">
+        <div class="formula-label" style="background:var(--accent5);color:#000">E-MOSFET</div>
+        <div class="vars" style="font-size:.82rem;line-height:2">
+          <span>ID</span> = k(VGS − VT)²<br>
+          <span>k</span> = ID(ON)/(VGS(ON)−VT)²<br>
+          <span>VDSsat</span> = VGS − VT<br>
+          &nbsp;
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEMORY TRICKS -->
+  <div style="margin-top:24px;background:var(--card);border-radius:12px;padding:22px 26px;border:1px solid var(--border)">
+    <h4 style="color:var(--accent1);margin-bottom:14px;font-family:'Playfair Display',serif">🧠 Memory Tricks Summary</h4>
+    <div class="two-col">
+      <ul class="fancy">
+        <li><strong>BODH</strong> → Binary Octal Decimal Hex (bases 2,8,10,16)</li>
+        <li><strong>"2 minus, 3 plus, 6 out"</strong> → LM741 pins</li>
+        <li><strong>"J sets, K clears, JK toggles"</strong> → JK flip-flop</li>
+        <li><strong>De Morgan</strong>: "Break the bar, change the sign"</li>
+      </ul>
+      <ul class="fancy">
+        <li><strong>CMRR↑ = better op-amp</strong> (rejects noise better)</li>
+        <li><strong>VGS=0 → D-MOS ON, E-MOS OFF</strong></li>
+        <li><strong>Latch = Level, FF = Edge</strong> (both start with same letter)</li>
+        <li><strong>"FET Fewer Electric Things"</strong> → unipolar, one carrier</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout-tip" style="margin-top:20px">
+    <div class="icon">🎯</div>
+    <div><strong>Last Day Strategy:</strong> 1) Read all formula boxes. 2) Skim the comparison tables. 3) Do Q1-Q3 numericals mentally. 4) Review the 4 revision cards above. 5) You're ready! Good luck! 🚀</div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+  // Sidebar active link highlighting on scroll
+  const sections = document.querySelectorAll('.section[id]');
+  const links = document.querySelectorAll('#sidebar a');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`#sidebar a[href="#${e.target.id}"]`);
+        if(active) active.classList.add('active');
+      }
+    });
+  }, {threshold: 0.3});
+  sections.forEach(s => obs.observe(s));
+</script>
 </body>
 </html>
+

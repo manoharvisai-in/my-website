@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basic Electronics — Exam Notes | BJT</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1209;
+    --paper: #faf7f0;
+    --cream: #f5f0e4;
+    --amber: #c8860a;
+    --amber-light: #f5c842;
+    --rust: #b84c1e;
+    --teal: #1a6b6b;
+    --teal-light: #e8f4f4;
+    --indigo: #2b3a8c;
+    --indigo-light: #eaecf8;
+    --green: #2d6a4f;
+    --green-light: #e8f5ee;
+    --red-light: #fdf0ee;
+    --border: #d4c9b0;
+    --shadow: rgba(26,18,9,0.12);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top:0; z-index:100;
+    background: var(--ink);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    box-shadow: 0 2px 12px var(--shadow);
+  }
+  nav::-webkit-scrollbar { display:none; }
+  nav a {
+    color: #c8b890; text-decoration:none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing:.08em; text-transform:uppercase;
+    white-space: nowrap;
+    padding: 14px 4px;
+    border-bottom: 2px solid transparent;
+    transition: all .2s;
+  }
+  nav a:hover { color: var(--amber-light); border-bottom-color: var(--amber); }
+  .nav-brand {
+    color: var(--amber-light) !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    border-right: 1px solid #444;
+    padding-right: 1.5rem !important;
+    margin-right: .5rem;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--ink);
+    padding: 4rem 3rem 3rem;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content:'';
+    position:absolute; inset:0;
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 40px,
+      rgba(200,134,10,.04) 40px, rgba(200,134,10,.04) 41px
+    );
+  }
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--amber); font-size: 11px;
+    letter-spacing: .15em; text-transform: uppercase;
+    margin-bottom: .75rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    color: #fff;
+    line-height: 1.1;
+    font-weight: 900;
+  }
+  .hero h1 span { color: var(--amber-light); }
+  .hero-sub {
+    color: #9a9080; font-size: 14px;
+    margin-top: .75rem;
+    font-style: italic;
+  }
+  .hero-pills {
+    display:flex; flex-wrap:wrap; gap:.5rem;
+    margin-top:1.5rem;
+  }
+  .pill {
+    background: rgba(200,134,10,.15);
+    border: 1px solid rgba(200,134,10,.3);
+    color: var(--amber-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing:.06em; text-transform:uppercase;
+    padding: 4px 10px; border-radius:2px;
+  }
+
+  /* LAYOUT */
+  .container { max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; }
+  .section { margin-bottom: 3.5rem; }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1.75rem;
+    padding-bottom: .75rem;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; font-weight: 900;
+    color: var(--border); line-height:1;
+    min-width: 2.5rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.45rem; font-weight: 700;
+    color: var(--ink);
+  }
+  .section-title small {
+    display:block; font-family:'Source Serif 4',serif;
+    font-size:.75rem; font-weight:400;
+    color:#888; letter-spacing:.05em; text-transform:uppercase;
+    margin-top:1px;
+  }
+
+  /* CARDS */
+  .card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 2px 2px 0 var(--border);
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--teal);
+    margin-bottom: .65rem;
+    padding-bottom: .4rem;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  /* CALLOUT BOXES */
+  .box {
+    border-left: 4px solid;
+    padding: 1rem 1.25rem;
+    border-radius: 0 3px 3px 0;
+    margin: 1rem 0;
+  }
+  .box-amber { background: #fdf8ec; border-color: var(--amber); }
+  .box-teal  { background: var(--teal-light); border-color: var(--teal); }
+  .box-indigo{ background: var(--indigo-light); border-color: var(--indigo); }
+  .box-green { background: var(--green-light); border-color: var(--green); }
+  .box-rust  { background: var(--red-light); border-color: var(--rust); }
+  .box-title {
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+    font-weight:700; margin-bottom:.4rem;
+  }
+  .box-amber .box-title { color:var(--amber); }
+  .box-teal  .box-title { color:var(--teal); }
+  .box-indigo .box-title{ color:var(--indigo); }
+  .box-green .box-title { color:var(--green); }
+  .box-rust  .box-title { color:var(--rust); }
+
+  /* FORMULA BLOCK */
+  .formula-block {
+    background: var(--ink);
+    border-radius: 4px;
+    padding: 1rem 1.5rem;
+    margin: .75rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--amber-light);
+    font-size: 1.05rem;
+    line-height: 1.9;
+    position:relative;
+  }
+  .formula-block .f-label {
+    position:absolute; top:8px; right:12px;
+    font-size:9px; letter-spacing:.1em; text-transform:uppercase;
+    color:#666;
+  }
+  .formula-var {
+    display:flex; flex-wrap:wrap; gap:.3rem .75rem;
+    margin-top:.6rem;
+    font-family:'Source Serif 4',serif;
+    font-size:13px; color:#ccc;
+  }
+  .formula-var span { color: var(--amber); }
+
+  /* TABLE */
+  table {
+    width:100%; border-collapse:collapse;
+    margin: .75rem 0;
+    font-size:13.5px;
+  }
+  th {
+    background: var(--ink);
+    color: var(--amber-light);
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px; letter-spacing:.07em; text-transform:uppercase;
+    padding: 10px 12px; text-align:left;
+  }
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align:top;
+  }
+  tr:nth-child(even) td { background: var(--cream); }
+  tr:hover td { background: #fdf8ec; }
+
+  /* LIST STYLES */
+  .styled-list { list-style:none; padding:0; }
+  .styled-list li {
+    padding: .4rem 0 .4rem 1.5rem;
+    position:relative;
+    border-bottom: 1px solid #f0ebe0;
+  }
+  .styled-list li:last-child { border-bottom:none; }
+  .styled-list li::before {
+    content: '▸';
+    position:absolute; left:0;
+    color: var(--amber);
+    font-size:11px; top:.55rem;
+  }
+
+  /* SOLVED NUMERICAL */
+  .numerical {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--indigo);
+    border-radius: 0 0 3px 3px;
+    padding: 1.25rem 1.5rem;
+    margin: 1rem 0;
+  }
+  .numerical .q-label {
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--indigo); font-weight:700;
+    margin-bottom:.4rem;
+  }
+  .numerical .question {
+    font-weight:600; color:var(--ink);
+    margin-bottom:.75rem;
+    font-size:14.5px;
+  }
+  .step {
+    display:flex; gap:1rem; margin:.4rem 0;
+    align-items:baseline;
+  }
+  .step-n {
+    min-width:1.4rem;
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px; color:var(--amber); font-weight:700;
+  }
+  .answer-box {
+    background: var(--green-light);
+    border: 1px solid var(--green);
+    border-radius:2px;
+    padding:.5rem 1rem;
+    margin-top:.75rem;
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px; color:var(--green);
+  }
+
+  /* BADGES */
+  .badge {
+    display:inline-block;
+    font-family:'JetBrains Mono',monospace;
+    font-size:9px; letter-spacing:.08em; text-transform:uppercase;
+    padding:2px 7px; border-radius:1px;
+    vertical-align:middle; margin-left:6px;
+  }
+  .badge-imp { background:#ffeeba; color:#856404; }
+  .badge-faq { background:#cce5ff; color:#004085; }
+  .badge-trick{ background:#d4edda; color:#155724; }
+
+  /* REVISION SHEET */
+  .mega-revision {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3rem 2rem;
+    margin-top: 3rem;
+    border-radius: 4px;
+  }
+  .mega-revision h2 {
+    font-family:'Playfair Display',serif;
+    font-size:2rem; color:var(--amber-light);
+    text-align:center; margin-bottom:.5rem;
+  }
+  .mega-revision .rev-sub {
+    text-align:center; color:#888; font-size:13px;
+    font-style:italic; margin-bottom:2rem;
+  }
+  .rev-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:1.25rem;
+  }
+  .rev-card {
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(200,134,10,.25);
+    border-radius:3px; padding:1rem 1.25rem;
+  }
+  .rev-card h3 {
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--amber); margin-bottom:.65rem;
+    padding-bottom:.4rem;
+    border-bottom:1px solid rgba(200,134,10,.2);
+  }
+  .rev-card ul { list-style:none; }
+  .rev-card ul li {
+    font-size:12.5px; color:#ccc;
+    padding:.3rem 0 .3rem 1.2rem;
+    position:relative;
+    border-bottom:1px solid rgba(255,255,255,.05);
+  }
+  .rev-card ul li:last-child{border-bottom:none;}
+  .rev-card ul li::before {
+    content:'→'; position:absolute; left:0;
+    color:var(--amber-light); font-size:10px; top:.45rem;
+  }
+  .rev-formula {
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px; color:var(--amber-light);
+    background:rgba(255,255,255,.04);
+    padding:2px 6px; border-radius:2px;
+    display:inline-block; margin:.15rem 0;
+  }
+
+  /* MNEMONIC */
+  .mnemonic {
+    background: linear-gradient(135deg,#fdf8ec,#fff8e1);
+    border: 1px dashed var(--amber);
+    border-radius:3px; padding:.75rem 1rem;
+    margin:.75rem 0;
+    font-size:13.5px;
+  }
+  .mnemonic strong { color:var(--amber); }
+
+  /* COMMON MISTAKES */
+  .mistake-item {
+    display:flex; gap:.75rem; align-items:baseline;
+    padding:.5rem 0; border-bottom:1px solid #f0ebe0;
+  }
+  .mistake-item:last-child{border-bottom:none;}
+  .mistake-x {
+    color:var(--rust); font-weight:700;
+    font-size:1.1rem; line-height:1;
+    min-width:1.2rem;
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius:3px; padding:1.25rem 1.5rem;
+    margin-bottom:2.5rem;
+  }
+  .toc h3 {
+    font-family:'Playfair Display',serif;
+    font-size:1rem; margin-bottom:.75rem;
+    color:var(--teal);
+  }
+  .toc ol { padding-left:1.5rem; }
+  .toc li { padding:.25rem 0; }
+  .toc a { color:var(--indigo); text-decoration:none; font-size:13.5px; }
+  .toc a:hover { color:var(--amber); text-decoration:underline; }
+
+  /* SEPARATOR */
+  hr.fancy {
+    border:none;
+    height:1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 2rem 0;
+  }
+
+  /* PRINT */
+  @media print {
+    nav { display:none; }
+    .hero { padding:1.5rem; }
+    .section { page-break-inside:avoid; }
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(20px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .container > .section {
+    animation: fadeUp .4s ease both;
+  }
+  .container > .section:nth-child(1){animation-delay:.05s}
+  .container > .section:nth-child(2){animation-delay:.1s}
+  .container > .section:nth-child(3){animation-delay:.15s}
+  .container > .section:nth-child(4){animation-delay:.2s}
+  .container > .section:nth-child(5){animation-delay:.25s}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand">EC10001</a>
+  <a href="#intro">Intro</a>
+  <a href="#construction">Construction</a>
+  <a href="#currents">Currents</a>
+  <a href="#config">Configurations</a>
+  <a href="#formulas">Formulas</a>
+  <a href="#cb-char">CB Char.</a>
+  <a href="#ce-char">CE Char.</a>
+  <a href="#biasing">Biasing</a>
+  <a href="#numericals">Numericals</a>
+  <a href="#mistakes">Mistakes</a>
+  <a href="#revision">Revision</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Basic Electronics · Module 2 · S.N. Mishra · KIIT</div>
+  <h1>Bipolar Junction<br><span>Transistor (BJT)</span></h1>
+  <div class="hero-sub">Complete Exam Notes — Characteristics · Configurations · Biasing · Numericals</div>
+  <div class="hero-pills">
+    <span class="pill">CB Config</span>
+    <span class="pill">CE Config</span>
+    <span class="pill">CC Config</span>
+    <span class="pill">Load Line</span>
+    <span class="pill">Fixed Bias</span>
+    <span class="pill">α β γ Relations</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- TOC -->
+  <div class="toc">
+    <h3>📋 Table of Contents</h3>
+    <ol>
+      <li><a href="#intro">Introduction & History</a></li>
+      <li><a href="#construction">Construction & Basic Structure</a></li>
+      <li><a href="#currents">Current Components & Key Equations</a></li>
+      <li><a href="#config">Transistor Configurations (CB, CE, CC)</a></li>
+      <li><a href="#formulas">All Formulas at a Glance</a></li>
+      <li><a href="#cb-char">CB Characteristics (I/P & O/P)</a></li>
+      <li><a href="#ce-char">CE Characteristics (I/P & O/P)</a></li>
+      <li><a href="#biasing">Load Line, Q-Point & Biasing</a></li>
+      <li><a href="#numericals">Solved Numericals</a></li>
+      <li><a href="#mistakes">Common Mistakes & FAQs</a></li>
+      <li><a href="#revision">⚡ Mega Revision Sheet</a></li>
+    </ol>
+  </div>
+
+  <!-- SECTION 1: INTRO -->
+  <div class="section" id="intro">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div class="section-title">Introduction & History<small>Who invented it · What it is</small></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Historical Milestone</div>
+      <ul class="styled-list">
+        <li>Transistor was invented on <strong>December 23, 1947</strong> at Bell Laboratories (research arm of AT&amp;T).</li>
+        <li>Inventors: <strong>William Shockley, John Bardeen, and Walter Brattain</strong> (Nobel Prize 1956).</li>
+        <li>Name origin: <strong>TRANS</strong>fer + re<strong>SISTOR</strong> = TRANSISTOR (transfers signal from low-R to high-R path).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">What is a BJT?</div>
+      <p>A <strong>Bipolar Junction Transistor (BJT)</strong> is a three-terminal semiconductor device made of two back-to-back PN junctions. Current depends on <em>both</em> majority and minority carriers — hence "bipolar."</p>
+      <div class="box box-amber" style="margin-top:.75rem">
+        <div class="box-title">Key Fact</div>
+        BJT is a <strong>current-controlled device</strong> — output current is controlled by input current.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Two Types of BJT</div>
+      <table>
+        <tr><th>Type</th><th>Structure</th><th>Majority Carriers in Base</th></tr>
+        <tr><td><strong>NPN</strong></td><td>N–P–N</td><td>Holes</td></tr>
+        <tr><td><strong>PNP</strong></td><td>P–N–P</td><td>Electrons</td></tr>
+      </table>
+      <div class="box box-teal" style="margin-top:.5rem">
+        <div class="box-title">Arrow Rule</div>
+        Arrow is always on the <strong>Emitter</strong>. It always points toward the N-type region.<br>
+        PNP: E→B &nbsp;|&nbsp; NPN: B→E (conventional current direction)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Applications</div>
+      <ul class="styled-list">
+        <li>Amplifier (analog electronics — active region)</li>
+        <li>Switch (digital electronics — saturation &amp; cutoff regions)</li>
+        <li>Oscillator circuits, computers, satellites, communication systems</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 2: CONSTRUCTION -->
+  <div class="section" id="construction">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div class="section-title">Construction & Basic Structure<small>Doping · Terminals · Width ratio</small></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Three Terminals</div>
+      <table>
+        <tr><th>Terminal</th><th>Doping</th><th>Width</th><th>Role</th></tr>
+        <tr><td><strong>Emitter (E)</strong></td><td>Heavily doped</td><td>Moderate</td><td>Emits majority carriers</td></tr>
+        <tr><td><strong>Base (B)</strong></td><td>Lightly doped</td><td>Very thin (≈1/150 of total)</td><td>Controls carrier flow</td></tr>
+        <tr><td><strong>Collector (C)</strong></td><td>Moderately doped</td><td>Widest</td><td>Collects carriers</td></tr>
+      </table>
+      <div class="box box-amber" style="margin-top:.75rem">
+        <div class="box-title">Memory Trick</div>
+        <strong>"Heavy–Light–Moderate"</strong> → Emitter–Base–Collector (E-B-C doping order).<br>
+        Mnemonic: <em>"<strong>E</strong>xtremely <strong>L</strong>ow <strong>M</strong>iddle"</em>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Important Ratios & Facts</div>
+      <ul class="styled-list">
+        <li>Ratio of total device width to base width = <strong>150:1</strong></li>
+        <li>Emitter-to-outer doping ratio ≈ <strong>10:1</strong> (keeps base lightly doped)</li>
+        <li>BJT has <strong>two PN junctions</strong>: Emitter-Base (EB) and Collector-Base (CB)</li>
+        <li>Two-diode analogy: back-to-back diodes (but transistors cannot be replaced by two diodes!)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 3: CURRENTS -->
+  <div class="section" id="currents">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div class="section-title">Current Components & Key Equations<small>KCL · Leakage · α, β, γ</small></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Basic KCL Relation</div>
+      <div class="formula-block">
+        I<sub style="font-size:.7em">E</sub> = I<sub style="font-size:.7em">C</sub> + I<sub style="font-size:.7em">B</sub>
+        <span class="f-label">KCL at BJT</span>
+      </div>
+      <div class="formula-var">
+        <span>I<sub>E</sub></span> = Emitter current &nbsp;
+        <span>I<sub>C</sub></span> = Collector current &nbsp;
+        <span>I<sub>B</sub></span> = Base current
+      </div>
+      <p style="margin-top:.5rem;font-size:13.5px;color:#555">Note: I<sub>E</sub> is the largest, I<sub>B</sub> is the smallest (≈1–5% of I<sub>E</sub>).</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">CB Current Equation (with leakage)</div>
+      <div class="formula-block">
+        I<sub style="font-size:.7em">C</sub> = α·I<sub style="font-size:.7em">E</sub> + I<sub style="font-size:.7em">CBO</sub><br>
+        I<sub style="font-size:.7em">C</sub> = [α/(1−α)]·I<sub style="font-size:.7em">B</sub> + [1/(1−α)]·I<sub style="font-size:.7em">CBO</sub>
+      </div>
+      <div class="formula-var">
+        <span>I<sub>CBO</sub></span> = reverse saturation (leakage) current in CB
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">CE Current Equation (with leakage)</div>
+      <div class="formula-block">
+        I<sub style="font-size:.7em">C</sub> = β·I<sub style="font-size:.7em">B</sub> + I<sub style="font-size:.7em">CEO</sub><br>
+        I<sub style="font-size:.7em">CEO</sub> = I<sub style="font-size:.7em">CBO</sub> / (1−α) = (1+β)·I<sub style="font-size:.7em">CBO</sub>
+      </div>
+      <div class="formula-var">
+        <span>I<sub>CEO</sub></span> = leakage current in CE &nbsp;(≫ I<sub>CBO</sub>, so CE is more temperature-sensitive)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">CC Current Equation</div>
+      <div class="formula-block">
+        I<sub style="font-size:.7em">E</sub> = (1+β)·I<sub style="font-size:.7em">B</sub> + I<sub style="font-size:.7em">CCO</sub>
+      </div>
+      <div class="formula-var">
+        <span>I<sub>CCO</sub></span> = leakage current in CC = (1+β)·I<sub>CBO</sub>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: CONFIGURATIONS -->
+  <div class="section" id="config">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div class="section-title">Transistor Configurations<small>CB · CE · CC — Gain Factors</small></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Three Configurations Summary</div>
+      <table>
+        <tr><th>Config</th><th>Common Terminal</th><th>I/P Terminals</th><th>O/P Terminals</th><th>Gain Factor</th></tr>
+        <tr><td><strong>CB</strong></td><td>Base</td><td>E–B</td><td>C–B</td><td>α (alpha)</td></tr>
+        <tr><td><strong>CE</strong></td><td>Emitter</td><td>B–E</td><td>C–E</td><td>β (beta)</td></tr>
+        <tr><td><strong>CC</strong></td><td>Collector</td><td>B–C (or B–E)</td><td>C–E</td><td>γ (gamma)</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Amplification Factors Defined</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:.5rem">
+        <div>
+          <div class="box box-teal">
+            <div class="box-title">α (Alpha) — CB</div>
+            <div class="formula-block" style="font-size:.95rem;padding:.6rem 1rem">α = I<sub style="font-size:.7em">C</sub> / I<sub style="font-size:.7em">E</sub></div>
+            Range: 0.95 – 0.995 (always &lt; 1)
+          </div>
+        </div>
+        <div>
+          <div class="box box-indigo">
+            <div class="box-title">β (Beta) — CE</div>
+            <div class="formula-block" style="font-size:.95rem;padding:.6rem 1rem">β = I<sub style="font-size:.7em">C</sub> / I<sub style="font-size:.7em">B</sub></div>
+            Value: 20–500 (always &gt; 1)
+          </div>
+        </div>
+        <div>
+          <div class="box box-green">
+            <div class="box-title">γ (Gamma) — CC</div>
+            <div class="formula-block" style="font-size:.95rem;padding:.6rem 1rem">γ = I<sub style="font-size:.7em">E</sub> / I<sub style="font-size:.7em">B</sub></div>
+            γ = 1 + β (always &gt; 1)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Full Comparison Table <span class="badge badge-imp">Most Important</span></div>
+      <table>
+        <tr><th>Parameter</th><th>CB</th><th>CE</th><th>CC</th></tr>
+        <tr><td>I/P Resistance</td><td>Very Low (~20–150 Ω)</td><td>Low (~1 kΩ)</td><td>High (~300 kΩ)</td></tr>
+        <tr><td>O/P Resistance</td><td>Very High (~1 MΩ)</td><td>High (~50 kΩ)</td><td>Low (~300 Ω)</td></tr>
+        <tr><td>Current Gain</td><td>&lt;1 (α)</td><td>High (β)</td><td>High (1+β)</td></tr>
+        <tr><td>Voltage Gain</td><td>High</td><td>Moderate</td><td>&lt;1 (≈1)</td></tr>
+        <tr><td>Power Gain</td><td>Moderate</td><td>Highest</td><td>Low</td></tr>
+        <tr><td>Phase Shift</td><td>0° (no inversion)</td><td>180° (inverts)</td><td>0° (no inversion)</td></tr>
+        <tr><td>Usage</td><td>HF amplifiers</td><td>General amplifier</td><td>Impedance matching</td></tr>
+      </table>
+      <div class="mnemonic">
+        <strong>Memory: "VLC — CB is Very Low in Current gain"</strong><br>
+        CE has 180° phase shift (the only one!) — "CE Certainly inverts (180)"
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: FORMULAS -->
+  <div class="section" id="formulas">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <div class="section-title">All Formulas at a Glance<small>Relations between α, β, γ</small></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">α ↔ β ↔ γ Relations <span class="badge badge-imp">★ Most Tested</span></div>
+      <div class="formula-block">
+        β = α / (1 − α)<br>
+        α = β / (1 + β)<br>
+        γ = 1 / (1 − α) = 1 + β<br>
+        α = (γ − 1) / γ
+        <span class="f-label">Derivable from I<sub>E</sub>=I<sub>C</sub>+I<sub>B</sub></span>
+      </div>
+      <div class="mnemonic">
+        <strong>Trick:</strong> If α is given → β = α/(1−α) &nbsp;|&nbsp; If β is given → α = β/(β+1)<br>
+        <strong>γ is always = 1 + β</strong> — just add 1 to β!
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Leakage Current Relations</div>
+      <div class="formula-block">
+        I<sub style="font-size:.7em">CEO</sub> = I<sub style="font-size:.7em">CBO</sub> / (1 − α)<br>
+        I<sub style="font-size:.7em">CEO</sub> = (1 + β) · I<sub style="font-size:.7em">CBO</sub><br>
+        I<sub style="font-size:.7em">CCO</sub> = I<sub style="font-size:.7em">CEO</sub> = (1 + β) · I<sub style="font-size:.7em">CBO</sub>
+      </div>
+      <div class="box box-rust">
+        <div class="box-title">⚠ Warning</div>
+        I<sub>CEO</sub> is <strong>(1+β) times</strong> larger than I<sub>CBO</sub>. This makes CE configuration more sensitive to temperature than CB.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Fixed Bias Equations</div>
+      <div class="formula-block">
+        I<sub style="font-size:.7em">B</sub> = (V<sub style="font-size:.7em">CC</sub> − V<sub style="font-size:.7em">BE</sub>) / R<sub style="font-size:.7em">B</sub><br>
+        I<sub style="font-size:.7em">C</sub> = β · I<sub style="font-size:.7em">B</sub><br>
+        V<sub style="font-size:.7em">CE</sub> = V<sub style="font-size:.7em">CC</sub> − I<sub style="font-size:.7em">C</sub> · R<sub style="font-size:.7em">C</sub><br>
+        S (stability) = 1 + β
+        <span class="f-label">Fixed / Base Bias</span>
+      </div>
+      <div class="formula-var">
+        <span>V<sub>BE</sub></span> = 0.7V (Silicon), 0.3V (Germanium)
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">DC Load Line Equations</div>
+      <div class="formula-block">
+        V<sub style="font-size:.7em">CE</sub> = V<sub style="font-size:.7em">CC</sub> − I<sub style="font-size:.7em">C</sub> · R<sub style="font-size:.7em">L</sub><br>
+        Point A: I<sub style="font-size:.7em">C</sub> = 0 → V<sub style="font-size:.7em">CE</sub> = V<sub style="font-size:.7em">CC</sub><br>
+        Point B: V<sub style="font-size:.7em">CE</sub> = 0 → I<sub style="font-size:.7em">C</sub> = V<sub style="font-size:.7em">CC</sub> / R<sub style="font-size:.7em">L</sub>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: CB CHARACTERISTICS -->
+  <div class="section" id="cb-char">
+    <div class="section-header">
+      <div class="section-num">06</div>
+      <div class="section-title">CB Characteristics<small>Input & Output — Operating Regions</small></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">CB Input Characteristics (I<sub>E</sub> vs V<sub>BE</sub>)</div>
+      <ul class="styled-list">
+        <li>Plot of input current (I<sub>E</sub>) vs input voltage (V<sub>BE</sub>) for constant V<sub>CB</sub>.</li>
+        <li>Shape is <strong>identical to diode V-I curve</strong> (forward biased EB junction).</li>
+        <li>For constant V<sub>BE</sub>: I<sub>E</sub> <strong>increases</strong> with increase in V<sub>CB</sub> (due to base width reduction).</li>
+        <li>For V<sub>BE</sub> &gt; cut-in voltage (≈0.7V): Input resistance is <strong>very small</strong>.</li>
+        <li>Curves shift <strong>right</strong> as V<sub>CB</sub> increases (Early effect).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">CB Output Characteristics (I<sub>C</sub> vs V<sub>CB</sub>) <span class="badge badge-faq">FAQ</span></div>
+      <table>
+        <tr><th>Region</th><th>EB Junction</th><th>CB Junction</th><th>Key Property</th></tr>
+        <tr><td><strong>Active</strong></td><td>Forward</td><td>Reverse</td><td>I<sub>C</sub> ≈ I<sub>E</sub> (amplifier region)</td></tr>
+        <tr><td><strong>Saturation</strong></td><td>Forward</td><td>Forward</td><td>Left of V<sub>CB</sub>=0, above I<sub>E</sub>=0</td></tr>
+        <tr><td><strong>Cutoff</strong></td><td>Reverse</td><td>Reverse</td><td>Below I<sub>E</sub>=0; I<sub>C</sub> = I<sub>CBO</sub></td></tr>
+        <tr><td><strong>Breakdown</strong></td><td>—</td><td>High reverse V</td><td>Avoid! Transistor may be destroyed</td></tr>
+      </table>
+      <div class="box box-green" style="margin-top:.75rem">
+        <div class="box-title">Active Region Key Points</div>
+        I<sub>C</sub> controlled by I<sub>E</sub>, almost independent of V<sub>CB</sub>. I<sub>B</sub> is very small, so I<sub>C</sub> ≈ I<sub>E</sub>.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Base Width Modulation (Early Effect) <span class="badge badge-imp">Important</span></div>
+      <ul class="styled-list">
+        <li>Increasing reverse bias on CB junction → depletion region widens into base → <strong>effective base width decreases</strong>.</li>
+        <li>This is called <strong>Early Effect or Base Width Modulation</strong>.</li>
+        <li>Reduced base width → fewer recombinations → I<sub>E</sub> increases for same V<sub>BE</sub>.</li>
+        <li>If base width → 0: <strong>punch-through</strong> occurs. Large I<sub>C</sub> flows; transistor may be destroyed.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 7: CE CHARACTERISTICS -->
+  <div class="section" id="ce-char">
+    <div class="section-header">
+      <div class="section-num">07</div>
+      <div class="section-title">CE Characteristics<small>Input & Output — Operating Regions</small></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">CE Input Characteristics (I<sub>B</sub> vs V<sub>BE</sub>)</div>
+      <ul class="styled-list">
+        <li>Shows relationship between base current I<sub>B</sub> and V<sub>BE</sub> at constant V<sub>CE</sub>.</li>
+        <li>Shape is <strong>identical to diode curve</strong>.</li>
+        <li>For constant V<sub>BE</sub>: I<sub>B</sub> is <strong>lower for higher V<sub>CE</sub></strong> (Early Effect).</li>
+        <li>Reason: V<sub>CB</sub> = V<sub>CE</sub> − V<sub>BE</sub>. As V<sub>CE</sub>↑, V<sub>CB</sub>↑ → base width decreases → I<sub>B</sub> decreases.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">CE Output Characteristics (I<sub>C</sub> vs V<sub>CE</sub>) <span class="badge badge-faq">FAQ</span></div>
+      <table>
+        <tr><th>Region</th><th>Condition</th><th>Properties</th></tr>
+        <tr><td><strong>Active</strong></td><td>EB fwd, CB rev; I<sub>B</sub> &gt; 0</td><td>β is max. Transistor acts as <strong>amplifier</strong>. Output R is very high.</td></tr>
+        <tr><td><strong>Saturation</strong></td><td>Both junctions fwd</td><td>β very low. I<sub>C</sub> saturates. Transistor = <strong>closed switch</strong>. Output R very small.</td></tr>
+        <tr><td><strong>Cutoff</strong></td><td>I<sub>B</sub> = 0; below I<sub>B</sub>=0 curve</td><td>I<sub>C</sub> = I<sub>CEO</sub> ≈ βI<sub>CBO</sub>. Transistor = <strong>open switch</strong>.</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Modes of Operation — Master Table <span class="badge badge-imp">★ Most Tested</span></div>
+      <table>
+        <tr><th>Region</th><th>EB Junction</th><th>CB Junction</th><th>Mode / Use</th></tr>
+        <tr><td>Cutoff</td><td>Reverse</td><td>Reverse</td><td>Open Switch</td></tr>
+        <tr><td>Saturation</td><td>Forward</td><td>Forward</td><td>Closed Switch</td></tr>
+        <tr><td>Active (Linear)</td><td>Forward</td><td>Reverse</td><td>Linear Amplifier</td></tr>
+      </table>
+      <div class="mnemonic">
+        <strong>Mnemonic: "Active = Forward-Reverse (like a normal diode forward, then reverse)"</strong><br>
+        "CUT is totally reversed | SAT is totally forward | ACTIVE is forward-reverse"
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: BIASING -->
+  <div class="section" id="biasing">
+    <div class="section-header">
+      <div class="section-num">08</div>
+      <div class="section-title">Load Line, Q-Point & Fixed Biasing<small>DC Analysis · Stability · Thermal Runaway</small></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">DC Load Line</div>
+      <p>A DC load line is a line that represents all possible DC operating conditions (I<sub>C</sub>, V<sub>CE</sub>) of the circuit, drawn on the output characteristics graph.</p>
+      <div class="box box-indigo" style="margin-top:.75rem">
+        <div class="box-title">How to Draw DC Load Line</div>
+        1. Set I<sub>C</sub> = 0 → Point on X-axis: V<sub>CE</sub> = V<sub>CC</sub><br>
+        2. Set V<sub>CE</sub> = 0 → Point on Y-axis: I<sub>C</sub> = V<sub>CC</sub>/R<sub>L</sub><br>
+        3. Join the two points → DC Load Line
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Q-Point (Quiescent Point)</div>
+      <ul class="styled-list">
+        <li>The <strong>intersection</strong> of the DC load line and the transistor output characteristic curve for a given I<sub>B</sub>.</li>
+        <li>Represents the DC operating point (no AC signal applied).</li>
+        <li>For faithful amplification: Q-point must be <strong>in the middle of the active region</strong> of the load line.</li>
+        <li>If Q shifts to top → positive peak clipped. If Q shifts to bottom → negative peak clipped.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Thermal Runaway</div>
+      <p>As temperature increases → I<sub>CBO</sub> doubles every 10°C → I<sub>C</sub> increases → power dissipation increases → temperature increases further. This cumulative process can destroy the transistor.</p>
+      <div class="box box-rust">
+        <div class="box-title">Three Factors that Shift Q-Point</div>
+        1. I<sub>CO</sub> doubles for every 10°C rise in temperature.<br>
+        2. V<sub>BE</sub> decreases by <strong>2.5 mV/°C</strong>.<br>
+        3. β (h<sub>FE</sub>) increases with temperature.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Stability Factors S, S', S''</div>
+      <div class="formula-block">
+        S = ∂I<sub style="font-size:.7em">C</sub>/∂I<sub style="font-size:.7em">CO</sub>  (keeping V<sub>BE</sub>, β constant)<br>
+        S' = ∂I<sub style="font-size:.7em">C</sub>/∂V<sub style="font-size:.7em">BE</sub>  (keeping I<sub>CO</sub>, β constant)<br>
+        S'' = ∂I<sub style="font-size:.7em">C</sub>/∂β  (keeping I<sub>CO</sub>, V<sub>BE</sub> constant)
+      </div>
+      <p style="margin-top:.5rem;font-size:13.5px">Lower S = more stable circuit. Ideal value: S = 1.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Fixed Bias (Base Bias) Circuit <span class="badge badge-imp">Important</span></div>
+      <ul class="styled-list">
+        <li>Single V<sub>CC</sub> for both collector and base via R<sub>B</sub>.</li>
+        <li>V<sub>CC</sub> = I<sub>B</sub>·R<sub>B</sub> + V<sub>BE</sub> → I<sub>B</sub> = (V<sub>CC</sub> − V<sub>BE</sub>)/R<sub>B</sub></li>
+        <li>Stability factor: <strong>S = 1 + β</strong> (very poor — large, so unstable).</li>
+      </ul>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.75rem">
+        <div class="box box-green">
+          <div class="box-title">✓ Merits</div>
+          Simple circuit. Few components. Easy to adjust Q-point by changing R<sub>B</sub>.
+        </div>
+        <div class="box box-rust">
+          <div class="box-title">✗ Demerits</div>
+          Very poor stability (S = 1+β). Q-point shifts with temperature and transistor replacement.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 9: NUMERICALS -->
+  <div class="section" id="numericals">
+    <div class="section-header">
+      <div class="section-num">09</div>
+      <div class="section-title">Solved Numericals<small>Step-by-step with tricks</small></div>
+    </div>
+
+    <!-- Numerical 1 -->
+    <div class="numerical">
+      <div class="q-label">Solved Problem #1</div>
+      <div class="question">Calculate I<sub>C</sub> and I<sub>E</sub> for a transistor with α = 0.98 and I<sub>B</sub> = 100 μA. Also find β.</div>
+      <div class="step"><span class="step-n">①</span> <span>Find β from α: β = α/(1−α) = 0.98/(1−0.98) = 0.98/0.02 = <strong>49</strong></span></div>
+      <div class="step"><span class="step-n">②</span> <span>I<sub>C</sub> = β × I<sub>B</sub> = 49 × 100 μA = <strong>4900 μA = 4.9 mA</strong></span></div>
+      <div class="step"><span class="step-n">③</span> <span>I<sub>E</sub> = I<sub>C</sub> + I<sub>B</sub> = 4.9 mA + 0.1 mA = <strong>5 mA</strong></span></div>
+      <div class="answer-box">✓ Answer: I<sub>C</sub> = 4.9 mA, I<sub>E</sub> = 5 mA, β = 49</div>
+    </div>
+
+    <!-- Numerical 2 -->
+    <div class="numerical">
+      <div class="q-label">Solved Problem #2</div>
+      <div class="question">NPN transistor α = 0.98, I<sub>E</sub> = 3 mA, I<sub>CO</sub> = 10 μA (CB mode). Find I<sub>B</sub> and I<sub>C</sub>.</div>
+      <div class="step"><span class="step-n">①</span> <span>I<sub>C</sub> = α·I<sub>E</sub> + I<sub>CBO</sub> = 0.98 × 3 mA + 10 μA = 2.94 mA + 0.01 mA = <strong>2.95 mA</strong></span></div>
+      <div class="step"><span class="step-n">②</span> <span>I<sub>B</sub> = I<sub>E</sub> − I<sub>C</sub> = 3 mA − 2.95 mA = <strong>0.05 mA = 50 μA</strong></span></div>
+      <div class="answer-box">✓ Answer: I<sub>C</sub> = 2.95 mA, I<sub>B</sub> = 50 μA</div>
+    </div>
+
+    <!-- Numerical 3 -->
+    <div class="numerical">
+      <div class="q-label">Solved Problem #3</div>
+      <div class="question">Transistor α = 0.975, I<sub>co</sub> = 10 μA in CE mode. Find β. If I<sub>B</sub> = 250 μA, find I<sub>E</sub> and I<sub>C</sub>.</div>
+      <div class="step"><span class="step-n">①</span> <span>β = α/(1−α) = 0.975/(1−0.975) = 0.975/0.025 = <strong>39</strong></span></div>
+      <div class="step"><span class="step-n">②</span> <span>I<sub>CEO</sub> = (1+β)·I<sub>CBO</sub> = 40 × 10 μA = 400 μA = 0.4 mA</span></div>
+      <div class="step"><span class="step-n">③</span> <span>I<sub>C</sub> = β·I<sub>B</sub> + I<sub>CEO</sub> = 39 × 0.25 mA + 0.4 mA = 9.75 + 0.4 = <strong>10.15 mA</strong></span></div>
+      <div class="step"><span class="step-n">④</span> <span>I<sub>E</sub> = I<sub>C</sub> + I<sub>B</sub> = 10.15 + 0.25 = <strong>10.4 mA</strong></span></div>
+      <div class="answer-box">✓ Answer: β = 39, I<sub>C</sub> = 10.15 mA, I<sub>E</sub> = 10.4 mA</div>
+    </div>
+
+    <!-- Numerical 4 -->
+    <div class="numerical">
+      <div class="q-label">Solved Problem #4 — Fixed Bias</div>
+      <div class="question">Fixed bias: R<sub>B</sub> = 240 kΩ, R<sub>C</sub> = 2.2 kΩ, β = 99, V<sub>CC</sub> = 12 V, V<sub>BE</sub> = 0.7 V. Find I<sub>B</sub>, I<sub>C</sub>, V<sub>CE</sub>.</div>
+      <div class="step"><span class="step-n">①</span> <span>I<sub>B</sub> = (V<sub>CC</sub> − V<sub>BE</sub>) / R<sub>B</sub> = (12 − 0.7) / 240k = 11.3 / 240000 = <strong>47.08 μA</strong></span></div>
+      <div class="step"><span class="step-n">②</span> <span>I<sub>C</sub> = β × I<sub>B</sub> = 99 × 47.08 μA = <strong>4.66 mA</strong></span></div>
+      <div class="step"><span class="step-n">③</span> <span>V<sub>CE</sub> = V<sub>CC</sub> − I<sub>C</sub>·R<sub>C</sub> = 12 − 4.66m × 2.2k = 12 − 10.25 = <strong>1.75 V</strong></span></div>
+      <div class="answer-box">✓ Answer: I<sub>B</sub> ≈ 47 μA, I<sub>C</sub> ≈ 4.66 mA, V<sub>CE</sub> ≈ 1.75 V</div>
+    </div>
+
+    <!-- Numerical 5 -->
+    <div class="numerical">
+      <div class="q-label">Solved Problem #5 — CEO Leakage</div>
+      <div class="question">NPN transistor α = 0.98, I<sub>co</sub> (CB) = 10 nA. Find leakage current in CE mode (I<sub>CEO</sub>).</div>
+      <div class="step"><span class="step-n">①</span> <span>β = α/(1−α) = 0.98/0.02 = 49</span></div>
+      <div class="step"><span class="step-n">②</span> <span>I<sub>CEO</sub> = (1+β) × I<sub>CBO</sub> = (1+49) × 10 nA = 50 × 10 nA = <strong>500 nA = 0.5 μA</strong></span></div>
+      <div class="answer-box">✓ I<sub>CEO</sub> = 500 nA (50× amplified compared to CB leakage!)</div>
+    </div>
+
+    <!-- Practice -->
+    <div class="box box-indigo" style="margin-top:1.5rem">
+      <div class="box-title">📝 Practice Questions (with Answers)</div>
+      <table>
+        <tr><th>Q</th><th>Problem</th><th>Answer</th></tr>
+        <tr><td>P1</td><td>α = 0.995. Find β and γ.</td><td>β = 199, γ = 200</td></tr>
+        <tr><td>P2</td><td>α = 0.98, I<sub>CEO</sub> = 80 nA, I<sub>B</sub> = 200 μA. Find I<sub>C</sub>.</td><td>I<sub>C</sub> = β·I<sub>B</sub> + I<sub>CEO</sub> ≈ 9.8 mA</td></tr>
+        <tr><td>P3</td><td>Fixed bias: V<sub>CC</sub>=20V, R<sub>B</sub>=200kΩ, R<sub>C</sub>=2.5kΩ, β=100. Find Q-point.</td><td>I<sub>B</sub>=96.5μA, I<sub>C</sub>=9.65mA, V<sub>CE</sub>=≈5.9V</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 10: MISTAKES & FAQ -->
+  <div class="section" id="mistakes">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <div class="section-title">Common Mistakes, FAQs & Exam Tips<small>Score higher by avoiding these</small></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">❌ Common Mistakes</div>
+      <div class="mistake-item"><span class="mistake-x">✗</span><span>Confusing α with β. Remember: α = β/(1+β) &lt; 1; β = α/(1−α) &gt; 1.</span></div>
+      <div class="mistake-item"><span class="mistake-x">✗</span><span>Forgetting to add I<sub>CEO</sub> when leakage is given in CE mode: I<sub>C</sub> = β·I<sub>B</sub> + I<sub>CEO</sub>, NOT just β·I<sub>B</sub>.</span></div>
+      <div class="mistake-item"><span class="mistake-x">✗</span><span>Using wrong V<sub>BE</sub>: Use 0.7V for Silicon, 0.3V for Germanium.</span></div>
+      <div class="mistake-item"><span class="mistake-x">✗</span><span>Thinking two diodes back-to-back = transistor. They are NOT equivalent.</span></div>
+      <div class="mistake-item"><span class="mistake-x">✗</span><span>Saying CE has 0° phase shift — it is 180° (it INVERTS the signal).</span></div>
+      <div class="mistake-item"><span class="mistake-x">✗</span><span>Drawing DC load line incorrectly: X-intercept = V<sub>CC</sub>; Y-intercept = V<sub>CC</sub>/R<sub>L</sub>.</span></div>
+      <div class="mistake-item"><span class="mistake-x">✗</span><span>Confusing I<sub>CBO</sub> (CB leakage) with I<sub>CEO</sub> (CE leakage). I<sub>CEO</sub> = (1+β)·I<sub>CBO</sub>.</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">❓ Frequently Asked Questions</div>
+      <ul class="styled-list">
+        <li><strong>Why is CE most commonly used?</strong> — Both current AND voltage gain are high, giving maximum power gain.</li>
+        <li><strong>Why is base kept thin and lightly doped?</strong> — To reduce recombination; almost all carriers reach collector.</li>
+        <li><strong>What is punch-through?</strong> — When base width → 0 due to excessive reverse bias; large I<sub>C</sub> flows, transistor destroyed.</li>
+        <li><strong>Why is Fixed Bias poor?</strong> — Stability factor S = 1+β is very high; Q-point shifts with temperature.</li>
+        <li><strong>What happens at Q-point if biased at top of load line?</strong> — Positive half-cycle of output gets clipped.</li>
+        <li><strong>Why does I<sub>CEO</sub> ≫ I<sub>CBO</sub>?</strong> — The (1+β) amplification factor, so CE config is far more temperature-sensitive.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✍ Exam Presentation Tips <span class="badge badge-trick">Score Tips</span></div>
+      <ul class="styled-list">
+        <li>Always state given values clearly at start: "Given: α = 0.98, I<sub>B</sub> = 100 μA"</li>
+        <li>Write formula first, then substitute: "I<sub>C</sub> = β × I<sub>B</sub> = 49 × 100 μA"</li>
+        <li>Box your final answers for easy examiner identification.</li>
+        <li>For characteristics questions: Draw the graph with labeled axes, indicate regions (Active/Saturation/Cutoff).</li>
+        <li>For biasing questions: Draw the circuit, write KVL equation, then solve.</li>
+        <li>Always check units: mA, μA, kΩ — unit errors = mark deductions.</li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- end container -->
+
+<!-- MEGA REVISION SHEET -->
+<div class="mega-revision" id="revision">
+  <div style="max-width:900px;margin:0 auto">
+    <h2>⚡ Mega Revision Sheet</h2>
+    <div class="rev-sub">Everything you need to revise the night before your exam</div>
+
+    <div class="rev-grid">
+
+      <div class="rev-card">
+        <h3>🔬 BJT Basics</h3>
+        <ul>
+          <li>Invented: Dec 23, 1947 at Bell Labs</li>
+          <li>Inventors: Shockley, Bardeen, Brattain</li>
+          <li>Current-controlled device</li>
+          <li>E: heavily doped | B: lightly | C: moderate</li>
+          <li>Base/total width ratio = 1/150</li>
+          <li>Two PN junctions; "bipolar" = both carriers</li>
+        </ul>
+      </div>
+
+      <div class="rev-card">
+        <h3>⚡ Key Formulas</h3>
+        <ul>
+          <li><span class="rev-formula">I_E = I_C + I_B</span></li>
+          <li><span class="rev-formula">α = I_C/I_E  (0.95–0.995)</span></li>
+          <li><span class="rev-formula">β = I_C/I_B  (&gt;1)</span></li>
+          <li><span class="rev-formula">γ = I_E/I_B = 1+β</span></li>
+          <li><span class="rev-formula">β = α/(1-α)</span></li>
+          <li><span class="rev-formula">α = β/(1+β)</span></li>
+          <li><span class="rev-formula">I_CEO = (1+β)·I_CBO</span></li>
+        </ul>
+      </div>
+
+      <div class="rev-card">
+        <h3>📊 CB vs CE vs CC</h3>
+        <ul>
+          <li>CB: Very low R_in, Very high R_out, α&lt;1</li>
+          <li>CE: Low R_in, High R_out, high β, 180° shift</li>
+          <li>CC: High R_in, Low R_out, γ=1+β, 0° shift</li>
+          <li>CE has maximum power gain → most used</li>
+          <li>CC = emitter follower (impedance matching)</li>
+          <li>CB: HF applications (no Miller effect)</li>
+        </ul>
+      </div>
+
+      <div class="rev-card">
+        <h3>📉 Operating Regions</h3>
+        <ul>
+          <li>Active: EB fwd + CB rev → Amplifier</li>
+          <li>Saturation: Both fwd → Closed switch</li>
+          <li>Cutoff: Both rev → Open switch</li>
+          <li>Breakdown: Excess V_CB → Destroy!</li>
+          <li>Punch-through: Base width → 0</li>
+          <li>Early effect = Base width modulation</li>
+        </ul>
+      </div>
+
+      <div class="rev-card">
+        <h3>📏 Load Line & Q-Point</h3>
+        <ul>
+          <li>Load line: V_CE = V_CC − I_C·R_L</li>
+          <li>X-intercept: V_CC (when I_C=0)</li>
+          <li>Y-intercept: V_CC/R_L (when V_CE=0)</li>
+          <li>Q-point = intersection with char. curve</li>
+          <li>Best Q: middle of load line</li>
+          <li>Q shifts → signal clipping/distortion</li>
+        </ul>
+      </div>
+
+      <div class="rev-card">
+        <h3>🔋 Fixed Bias</h3>
+        <ul>
+          <li><span class="rev-formula">I_B = (V_CC - V_BE)/R_B</span></li>
+          <li><span class="rev-formula">I_C = β·I_B</span></li>
+          <li><span class="rev-formula">V_CE = V_CC - I_C·R_C</span></li>
+          <li>Stability S = 1+β → POOR</li>
+          <li>V_BE = 0.7V (Si), 0.3V (Ge)</li>
+          <li>Merit: simple | Demerit: unstable</li>
+        </ul>
+      </div>
+
+      <div class="rev-card">
+        <h3>🌡 Thermal Stability</h3>
+        <ul>
+          <li>I_CBO doubles per 10°C rise</li>
+          <li>V_BE decreases 2.5 mV/°C</li>
+          <li>β increases with temperature</li>
+          <li>Thermal runaway → transistor damage</li>
+          <li>S, S', S'' = stability factors</li>
+          <li>Lower S = more stable bias circuit</li>
+        </ul>
+      </div>
+
+      <div class="rev-card">
+        <h3>🧠 Quick Memory Tricks</h3>
+        <ul>
+          <li>β = α/(1-α) → "alpha divided by its complement"</li>
+          <li>γ = 1+β → "just add 1 to beta"</li>
+          <li>CE: 180° → "CE Certainly inverts"</li>
+          <li>Active: fwd-rev → "normal working"</li>
+          <li>I_CEO = (1+β)·I_CBO → amplified leakage</li>
+          <li>I_E is always LARGEST of three currents</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div style="margin-top:2rem;padding:1.25rem;background:rgba(200,134,10,.1);border:1px solid rgba(200,134,10,.3);border-radius:3px;text-align:center">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:.4rem">Expected Exam Questions</div>
+      <div style="display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;font-size:12.5px;color:#ccc">
+        <span style="background:rgba(255,255,255,.07);padding:3px 10px;border-radius:2px">Derive relation between α, β, γ</span>
+        <span style="background:rgba(255,255,255,.07);padding:3px 10px;border-radius:2px">Draw and explain CE output characteristics</span>
+        <span style="background:rgba(255,255,255,.07);padding:3px 10px;border-radius:2px">Explain Early Effect / Base Width Modulation</span>
+        <span style="background:rgba(255,255,255,.07);padding:3px 10px;border-radius:2px">Compare CB, CE, CC configurations</span>
+        <span style="background:rgba(255,255,255,.07);padding:3px 10px;border-radius:2px">Draw and analyze Fixed Bias circuit</span>
+        <span style="background:rgba(255,255,255,.07);padding:3px 10px;border-radius:2px">Explain Q-point and DC Load Line</span>
+        <span style="background:rgba(255,255,255,.07);padding:3px 10px;border-radius:2px">What is thermal runaway?</span>
+        <span style="background:rgba(255,255,255,.07);padding:3px 10px;border-radius:2px">Numericals on α, β, I_B, I_C, I_E</span>
+      </div>
+    </div>
+
+    <div style="margin-top:1.5rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:#555;letter-spacing:.05em">
+      Basic Electronics EC10001 · Notes by S.N.Mishra · KIIT Deemed to be University
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
